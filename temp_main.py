@@ -6,10 +6,8 @@ import sys
 from network_monitoring import handle_info_about_host
 
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
-
-
-
+sys.path.insert(0,
+                os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 
 
 hosts = [('google.com', 'google.com'),
@@ -18,16 +16,19 @@ hosts = [('google.com', 'google.com'),
          ('172.19.5.110', 'AAA'),
          ('10.10.15.101', 'BBB'),
          ('13.17.22.12', 'CCC'),
+         ('19.156.187.23', 'DDD'),
+         ('234.243.123.32', 'EEE')
          ]
 
 
 def timer_decorator(func):
     def wrapper(*args, **kwargs):
         start_time = time.time()
-        result = func(*args, **kwargs)
+        result_ = func(*args, **kwargs)
         end_time = time.time()
-        print(f'Function {func.__name__} took {end_time - start_time} seconds to execute.')
-        return result
+        print(f'Function {func.__name__} took {end_time - start_time}'
+              f' seconds to execute.')
+        return result_
     return wrapper
 
 
@@ -55,5 +56,8 @@ def check_available_all_hosts_without_threading():
 
 
 if __name__ == "__main__":
-    print(check_available_all_hosts_with_threading())
+    result = check_available_all_hosts_with_threading()
+    for res in result:
+        print(res)
+    print('='*60)
     check_available_all_hosts_without_threading()

@@ -1,30 +1,34 @@
 from ping3 import ping
 
 
-def __check_host(host: str) -> tuple:
+def __check_host(host_ip: str) -> tuple:
     """
     Функция посылает 3 icmp пакета для проверки качества линии связи,
     используя функцию ping. Функция ping возвращает: float - OK (среднее
     время задержки), False - хост недоступен, None - ошибка в сети
-    :param host: ip адрес хоста
+    :param host_ip: ip адрес хоста
     :return: Результат 3-х ping запросов в виде кортежа
     """
     result = []
     for i in range(3):
-        result.append(ping(host))
+        result.append(ping(host_ip))
     return tuple(result)
 
 
-def handle_info_about_host(host_ip: str, host_name: str, queue = None) -> tuple:
+def handle_info_about_host(host_ip: str, host_name: str,
+                           queue=None) -> tuple:
     """
-    Обрабатывает информация, полученную от check_host
+    Обрабатывает информацию, полученную от check_host
+    :param host_ip: ip адрес хоста
+    :param host_name: доменное имя хоста (узла связи)
+    :param queue: Объект класса Queue. Необходим для работы в многопоточном
+    режиме
+    :return: возвращает результат обработки информации, полученной от хоста
+    в виде кортежа
     execution_code = -1: произошла непредвиденная ошибка
     execution_code = 0: запрашиваемый узел доступен, пингуется без ошибок
     execution_code = 1: Присутствуют ошибки при пинге запрашиваемого узла
     execution_code = 2: запрашиваемый узел недоступен
-    :param host_ip: ip адрес хоста
-    :param host_name: доменное имя хоста (узла связи)
-    :return:
     """
     try:
         info = __check_host(host_ip)
@@ -49,7 +53,8 @@ def handle_info_about_host(host_ip: str, host_name: str, queue = None) -> tuple:
         average_delay = total_delay / successful_icmp_request
         if successful_icmp_request == 3:
             execution_code = 0
-            result = execution_code, host_ip, host_name, round(average_delay, 3)
+            result = execution_code, host_ip, host_name, \
+                round(average_delay, 3)
             if queue:
                 queue.put(result)
             return result
@@ -61,7 +66,12 @@ def handle_info_about_host(host_ip: str, host_name: str, queue = None) -> tuple:
                 queue.put(result)
             return result
     except OSError:
-        print('Возможно у Вас недостаточно прав для запуска данной команды')
+        print('Проверьте работает ли у Вас сетевая карта')
+        execution_code = -1
+        result = execution_code, host_ip, host_name
+        if queue:
+            queue.put(result)
+        return result
 
 
 if __name__ == "__main__":
