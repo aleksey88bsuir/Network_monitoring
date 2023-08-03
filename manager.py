@@ -59,23 +59,24 @@ class Manager:
         errors = []
         for res in result:
             if res[0] == 0:
-                online_hosts.append(int(res[1]))
+                online_hosts.append(res)
             elif res[0] == 1:
-                online_hosts_with_error.append(int(res[1]))
+                online_hosts_with_error.append(res)
             elif res[0] == 2:
-                offline_hosts.append(int(res[1]))
+                offline_hosts.append(res)
             else:
-                errors.append(int(res[1]))
+                errors.append(res)
         return online_hosts, online_hosts_with_error, offline_hosts, errors
 
     def processing_lists(self):
         lists = self.allocation_to_lists()
         for host in lists[0]:  # online host
             if host:
-                self.what_do_when_online(host)
+                self.what_do_when_online(int(host[0]), host[3])
         for host in lists[1]:  # online host with errors
             if host:
-                self.what_do_when_online_with_errors(host)
+                self.what_do_when_online_with_errors(int(host[0]), host[3],
+                                                     host[4])
         for host in lists[2]:  # offline host
             if host:
                 self.what_do_when_offline(host)
@@ -83,18 +84,22 @@ class Manager:
             app_loger.error('Проблемы с сетевой картой или кабелем')
             say_computer_about_cable()
 
-    def what_do_when_online(self, host: int):
+    def what_do_when_online(self, host: int, delay: float):
         current_host = self.list_of_hosts.get(host)
         if current_host.status_host in ('unknown', 'offline'):
             current_host.change_status_host_on_online()
             current_host.change_color('green')
+            current_host.setup_average_delay(delay)
             self.list_of_hosts[current_host.id] = current_host
             self.wwhs.create(current_host.id, current_host.status_host)
 
-    def what_do_when_online_with_errors(self, host: int, lost_pac: int):
+    def what_do_when_online_with_errors(self, host: int,
+                                        delay: float,
+                                        lost_pac: int):
         current_host = self.list_of_hosts.get(host)
         color = self.define_color(lost_pac)
         current_host.change_color(color)
+        current_host.setup_average_delay(delay)
         if current_host.status_host in ('unknown', 'offline'):
             current_host.change_status_host_on_online()
             self.wwhs.create(current_host.id, current_host.status_host)

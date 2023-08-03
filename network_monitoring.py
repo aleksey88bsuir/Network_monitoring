@@ -38,12 +38,14 @@ def handle_info_about_host(host_ip: str, host_name: str,
             if queue:
                 queue.put(result)
             return result
+
         if all(info) is False:
             execution_code = 2
             result = execution_code, host_ip, host_name
             if queue:
                 queue.put(result)
             return result
+
         successful_icmp_request = 0
         total_delay = 0
         for result in info:

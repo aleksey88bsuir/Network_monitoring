@@ -6,6 +6,7 @@ class PingObject:
         self.ip_add = ip_add
         self.alarm = music
         self.descr = description
+        self.average_delay = None
         self.status_host = 'unknown'
         self.color = 'gray'
         self.host_alarm = music
@@ -22,6 +23,9 @@ class PingObject:
 
     def change_color(self, color: str):
         self.color = color
+
+    def setup_average_delay(self, delay):
+        self.average_delay = delay
 
     def __str__(self):
         return f'Объект с атрибутами: {self.__dict__}'
