@@ -4,7 +4,6 @@ import time
 import os
 import sys
 from network_monitoring import handle_info_about_host
-from db.work_with_table_hosts import WorkWithHosts
 
 
 sys.path.insert(0,
@@ -62,5 +61,3 @@ if __name__ == "__main__":
         print(res)
     print('='*60)
     check_available_all_hosts_without_threading()
-    data = WorkWithHosts().read_all_data()
-    print(data)

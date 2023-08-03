@@ -21,7 +21,7 @@ class WorkWithHostStatus:
                                    f'{host_pk}')
 
     @staticmethod
-    def read_all_data():
+    def read_all_data() -> list:
         with Session() as session:
             info_hosts = session.query(InfoAboutStatus).all()
             status_info = []

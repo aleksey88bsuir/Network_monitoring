@@ -25,7 +25,7 @@ class WorkWithHosts:
                                 f'{host_dict.get("ip_add")}')
 
     @staticmethod
-    def read_all_data():
+    def read_all_data() -> list:
         with Session() as session:
             hosts = session.query(Hosts).all()
             hosts_list = []
