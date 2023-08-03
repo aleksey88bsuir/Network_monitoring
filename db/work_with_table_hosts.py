@@ -44,14 +44,8 @@ class WorkWithHosts:
     def read_info_about_host(host_id: int) -> Hosts:
         with Session() as session:
             host = session.query(Hosts).\
-                filter_by(Hosts.host_id == host_id).first()
+                filter((Hosts.host_id == host_id)).first()
             if host:
-                Hosts(host_id=host.host_id,
-                      ip_add=host.ip_add,
-                      name=host.name,
-                      music=host.music,
-                      descr=host.descr,
-                      )
                 return host
 
     @staticmethod
@@ -59,13 +53,15 @@ class WorkWithHosts:
         with Session() as session:
             session.query(Hosts).\
                     filter(Hosts.host_id == host.host_id).update(
-                    dict(host_id=host.host_id,
-                         ip_add=host.ip_add,
+                    dict(ip_add=host.ip_add,
                          name=host.name,
                          music=host.music,
                          descr=host.descr,
                          ))
             session.commit()
+            app_loger.info(f'Успешно обновлена запись в БД '
+               f'{host.name}, '
+               f'{host.ip_add}')
 
     @staticmethod
     def delete_host(host: Hosts) -> None:
@@ -78,4 +74,3 @@ class WorkWithHosts:
                 app_loger.info(f'Успешно удалена запись из БД '
                                f'{host_for_del.name}, '
                                f'{host_for_del.ip_add}')
-пш

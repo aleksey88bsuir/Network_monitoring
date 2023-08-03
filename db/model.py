@@ -24,6 +24,10 @@ class Hosts(Base):
     lost_packets = relationship("LostPackets", cascade="all, delete-orphan",
                                 backref="host")
 
+    def __repr__(self):
+        return f'{self.host_id} {self.name} {self.ip_add} \n' \
+               f'{self.music=} {self.descr=}'
+    
 
 class InfoAboutStatus(Base):
     __tablename__ = "info_about_status"
