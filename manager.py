@@ -72,14 +72,14 @@ class Manager:
         lists = self.allocation_to_lists()
         for host in lists[0]:  # online host
             if host:
-                self.what_do_when_online(int(host[0]), host[3])
+                self.what_do_when_online(int(host[1]), host[3])
         for host in lists[1]:  # online host with errors
             if host:
-                self.what_do_when_online_with_errors(int(host[0]), host[3],
+                self.what_do_when_online_with_errors(int(host[1]), host[3],
                                                      host[4])
         for host in lists[2]:  # offline host
             if host:
-                self.what_do_when_offline(host)
+                self.what_do_when_offline(int(host[1]))
         if len(lists[3]) != 0:  # errors
             app_loger.error('Проблемы с сетевой картой или кабелем')
             say_computer_about_cable()
