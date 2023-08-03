@@ -1,3 +1,4 @@
 .idea/
 __pycache__/
-.db/remote_hosts.db
+db/remote_hosts.db
+db/app.log

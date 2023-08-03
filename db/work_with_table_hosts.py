@@ -1,4 +1,6 @@
-from model import Hosts, Session
+from db.model import Hosts, Session
+from sqlalchemy.exc import IntegrityError
+from loger import app_loger
 
 
 class WorkWithHosts:
@@ -6,14 +8,21 @@ class WorkWithHosts:
     @staticmethod
     def create(host_dict: dict) -> None:
         with Session() as session:
-            # host = self.read_info_about_host()
-            new_data = Hosts(
-                ip_add=host_dict.get('ip_add'),
-                name=host_dict.get('name'),
-                music=host_dict.get('music'),
-                descr=host_dict.get('descr'))
-            session.add(new_data)
-            session.commit()
+            try:
+                new_data = Hosts(
+                    ip_add=host_dict.get('ip_add'),
+                    name=host_dict.get('name'),
+                    music=host_dict.get('music'),
+                    descr=host_dict.get('descr'))
+                session.add(new_data)
+                session.commit()
+                app_loger.info(f'Успешно произведена запись в БД '
+                               f'{host_dict.get("name")}, '
+                               f'{host_dict.get("ip_add")}')
+            except IntegrityError:
+                app_loger.error(f'Невозможно записать в БД '
+                                f'{host_dict.get("name")} c IP-адресом'
+                                f'{host_dict.get("ip_add")}')
 
     @staticmethod
     def read_all_data():
@@ -66,3 +75,7 @@ class WorkWithHosts:
             if host_for_del:
                 session.delete(host_for_del)
                 session.commit()
+                app_loger.info(f'Успешно удалена запись из БД '
+                               f'{host_for_del.name}, '
+                               f'{host_for_del.ip_add}')
+пш
