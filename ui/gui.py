@@ -24,7 +24,6 @@ class MyWindow(QtWidgets.QMainWindow):
         self.ui.b_stop.clicked.connect(self.stop_monitoring)
         self.ui.b_stop.setEnabled(False)
 
-
     def set_data(self):
         self.manager.add_host()
         self.hosts_data = self.manager.read_hosts_status()
@@ -51,6 +50,7 @@ class MyWindow(QtWidgets.QMainWindow):
         return item
 
     def start_monitoring(self):
+        self.monitoring.run_program = True
         self.ui.b_start.setEnabled(False)
         self.ui.b_stop.setEnabled(True)
         self.monitoring.start()

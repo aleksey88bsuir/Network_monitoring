@@ -12,8 +12,8 @@ class Monitoring(QThread):
     def run(self):
         while self.run_program:
             self.start_monitoring()
-            time.sleep(3)
-            print('New')
+            time.sleep(1)
+            print('New circle')
         print('Stop program')
         self.app.ui.b_start.setEnabled(True)
 

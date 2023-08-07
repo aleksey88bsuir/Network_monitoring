@@ -15,7 +15,7 @@ def __check_host(host_ip: str) -> tuple:
     return tuple(result)
 
 
-def handle_info_about_host(host_ip: str, host_name: str,
+def handle_info_about_host(host_name: str, host_ip: str,
                            queue=None) -> tuple:
     """
     Обрабатывает информацию, полученную от check_host
@@ -34,14 +34,14 @@ def handle_info_about_host(host_ip: str, host_name: str,
         info = __check_host(host_ip)
         if any(info) is None:
             execution_code = -1
-            result = execution_code, host_ip, host_name
+            result = execution_code, host_name, host_ip
             if queue:
                 queue.put(result)
             return result
 
         if all(info) is False:
             execution_code = 2
-            result = execution_code, host_ip, host_name
+            result = execution_code, host_name, host_ip
             if queue:
                 queue.put(result)
             return result
@@ -55,14 +55,14 @@ def handle_info_about_host(host_ip: str, host_name: str,
         average_delay = total_delay / successful_icmp_request
         if successful_icmp_request == 3:
             execution_code = 0
-            result = execution_code, host_ip, host_name, \
+            result = execution_code, host_name, host_ip, \
                 round(average_delay, 3)
             if queue:
                 queue.put(result)
             return result
         else:
             execution_code = 1
-            result = execution_code, host_ip, host_name,\
+            result = execution_code, host_name, host_ip,\
                 round(average_delay, 3), (3 - successful_icmp_request)
             if queue:
                 queue.put(result)
@@ -70,7 +70,7 @@ def handle_info_about_host(host_ip: str, host_name: str,
     except OSError:
         print('Проверьте работает ли у Вас сетевая карта')
         execution_code = -1
-        result = execution_code, host_ip, host_name
+        result = execution_code, host_name, host_ip
         if queue:
             queue.put(result)
         return result
