@@ -1,5 +1,5 @@
-# import pyttsx3
-# from playsound import playsound
+import pyttsx3
+from playsound import playsound
 
 
 def say_computer(name_host: str):
@@ -28,3 +28,7 @@ def say_computer_about_cable():
     engine.say('НЕИСПРАВНОСТЬ')
     engine.runAndWait()
     engine.stop()
+
+
+if __name__ == "__main__":
+    playsound('voice_files/boom.wav')

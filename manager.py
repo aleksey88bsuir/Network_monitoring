@@ -7,6 +7,7 @@ from queue import Queue
 from threading import Thread
 from loger import app_loger
 from program_voice.python_voice import say_computer, say_computer_about_cable
+from playsound import playsound
 
 
 class Manager:
@@ -15,7 +16,7 @@ class Manager:
         self.wwh = WorkWithHosts()
         self.wwhs = WorkWithHostStatus()
         self.wwlp = WorkWithLostPackets()
-        self.list_of_hosts = {}
+        self.list_of_hosts = dict()
 
     def add_host(self) -> None:
         data_from_db = self.wwh.read_all_data()
@@ -52,7 +53,6 @@ class Manager:
 
     def allocation_to_lists(self):
         result = self.check_available_all_hosts_with_threading()
-        print(result)
         online_hosts = []
         online_hosts_with_error = []
         offline_hosts = []
@@ -122,8 +122,13 @@ class Manager:
         else:
             return 'yellow'
 
-    def play_alarm(self, host):
+    @staticmethod
+    def play_alarm(host):
         pass
+        # if host.engine_sound:
+        #     say_computer(host.name)
+        # else:
+        #     playsound(f'program_voice/voice_files/{host.alarm}')
 
     def start_program(self):
         pass
