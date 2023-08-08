@@ -6,9 +6,8 @@ from ping_object import PingObject
 from queue import Queue
 from threading import Thread
 from loger import app_loger
-from program_voice.python_voice import say_computer, say_computer_about_cable
+from program_voice.python_voice import PyVoice
 from playsound import playsound
-import time
 
 
 class Manager:
@@ -50,7 +49,6 @@ class Manager:
         results = []
         while not queue.empty():
             results.append(queue.get())
-        print(f'{results=}')
         return results
 
     def allocation_to_lists(self):
@@ -73,7 +71,6 @@ class Manager:
     def processing_lists(self):
         lists = self.allocation_to_lists()
         for host in lists[0]:  # online host
-            print(f'{lists[0]=}')
             if host:
                 self.what_do_when_online(int(host[1]), host[3])
         for host in lists[1]:  # online host with errors
@@ -85,7 +82,7 @@ class Manager:
                 self.what_do_when_offline(int(host[1]))
         if len(lists[3]) != 0:  # errors
             app_loger.error('Проблемы с сетевой картой или кабелем')
-            say_computer_about_cable()
+            PyVoice.say_computer_about_cable()
 
     def what_do_when_online(self, host: int, delay: float):
         current_host = self.list_of_hosts.get(host)
@@ -95,7 +92,6 @@ class Manager:
             current_host.change_color('green')
             self.wwhs.create(current_host.id, current_host.status_host)
         self.list_of_hosts[current_host.id] = current_host
-
 
     def what_do_when_online_with_errors(self, host: int,
                                         delay: float,
@@ -122,14 +118,14 @@ class Manager:
     @staticmethod
     def define_color(amount_lp: int) -> str:
         if amount_lp == 1:
-            return 'dark_yellow'
+            return 'orange'
         else:
             return 'yellow'
 
     @staticmethod
     def play_alarm(host):
         if host.engine_sound:
-            say_computer(host.name)
+            PyVoice.say_computer(host.name)
         else:
             playsound(f'program_voice/voice_files/{host.alarm}')
 
