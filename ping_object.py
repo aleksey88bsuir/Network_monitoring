@@ -18,6 +18,9 @@ class PingObject:
     def change_status_host_on_online(self):
         self.status_host = 'online'
 
+    def change_status_host_on_online_with_errors(self):
+        self.status_host = 'online_with_error'
+
     def change_status_host_on_offline(self):
         self.status_host = 'offline'
 

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>640</width>
-    <height>480</height>
+    <height>382</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,8 +17,8 @@
    <widget class="QPushButton" name="b_start">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>290</y>
+      <x>10</x>
+      <y>10</y>
       <width>141</width>
       <height>25</height>
      </rect>
@@ -30,8 +30,8 @@
    <widget class="QPushButton" name="b_stop">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>320</y>
+      <x>10</x>
+      <y>40</y>
       <width>141</width>
       <height>25</height>
      </rect>
@@ -40,24 +40,11 @@
      <string>Stop_monitoring</string>
     </property>
    </widget>
-   <widget class="QLabel" name="l_current_status">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>260</y>
-      <width>451</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
    <widget class="QPushButton" name="b_modify">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>350</y>
+      <x>10</x>
+      <y>70</y>
       <width>141</width>
       <height>25</height>
      </rect>
@@ -69,8 +56,8 @@
    <widget class="QDial" name="q_volume_cont">
     <property name="geometry">
      <rect>
-      <x>180</x>
-      <y>280</y>
+      <x>150</x>
+      <y>0</y>
       <width>111</width>
       <height>101</height>
      </rect>
@@ -79,8 +66,8 @@
    <widget class="QLabel" name="l_volume">
     <property name="geometry">
      <rect>
-      <x>300</x>
-      <y>350</y>
+      <x>270</x>
+      <y>70</y>
       <width>321</width>
       <height>17</height>
      </rect>
@@ -92,17 +79,12 @@
    <widget class="QTableWidget" name="tableWidget">
     <property name="geometry">
      <rect>
-      <x>30</x>
-      <y>60</y>
-      <width>601</width>
+      <x>0</x>
+      <y>110</y>
+      <width>631</width>
       <height>192</height>
      </rect>
     </property>
-    <column>
-     <property name="text">
-      <string>Новый столбец</string>
-     </property>
-    </column>
     <column>
      <property name="text">
       <string>Имя хоста</string>
@@ -116,6 +98,11 @@
     <column>
      <property name="text">
       <string>Статус в сети</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Время задержки</string>
      </property>
     </column>
     <column>

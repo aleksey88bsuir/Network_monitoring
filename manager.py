@@ -8,7 +8,7 @@ from threading import Thread
 from loger import app_loger
 from program_voice.python_voice import PyVoice
 from playsound import playsound
-
+from time import sleep
 
 class Manager:
     """Класс управления программой"""
@@ -40,6 +40,7 @@ class Manager:
         queue = Queue()
         threads = []
         for host in self.list_of_hosts.values():
+            sleep(.7)
             t = Thread(target=handle_info_about_host,
                        args=(str(host.id), host.ip_add, queue))
             t.start()
@@ -87,7 +88,10 @@ class Manager:
     def what_do_when_online(self, host: int, delay: float):
         current_host = self.list_of_hosts.get(host)
         current_host.setup_average_delay(delay)
-        if current_host.status_host in ('unknown', 'offline'):
+        if current_host.status_host == 'online_with_error':
+            current_host.change_color('green')
+            current_host.change_status_host_on_online()
+        elif current_host.status_host in ('unknown', 'offline'):
             current_host.change_status_host_on_online()
             current_host.change_color('green')
             self.wwhs.create(current_host.id, current_host.status_host)
@@ -103,12 +107,15 @@ class Manager:
         if current_host.status_host in ('unknown', 'offline'):
             current_host.change_status_host_on_online()
             self.wwhs.create(current_host.id, current_host.status_host)
-        self.wwlp.create(current_host.id, lost_pac)
+        elif current_host.status_host == 'online':
+            current_host.change_status_host_on_online_with_errors()
+        # self.wwlp.create(current_host.id, lost_pac)
         self.list_of_hosts[current_host.id] = current_host
 
     def what_do_when_offline(self, host: int):
         current_host = self.list_of_hosts.get(host)
-        if current_host.status_host in ('unknown', 'online'):
+        if current_host.status_host in ('unknown', 'online',
+                                        'online_with_error'):
             current_host.change_status_host_on_offline()
             current_host.change_color('red')
             self.list_of_hosts[current_host.id] = current_host
@@ -118,9 +125,9 @@ class Manager:
     @staticmethod
     def define_color(amount_lp: int) -> str:
         if amount_lp == 1:
-            return 'orange'
-        else:
             return 'yellow'
+        else:
+            return 'orange'
 
     @staticmethod
     def play_alarm(host):
