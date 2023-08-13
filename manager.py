@@ -8,7 +8,10 @@ from threading import Thread
 from loger import app_loger
 from program_voice.python_voice import PyVoice
 from playsound import playsound
+from temp import run_ping
 from time import sleep
+from parsing_answer import allocation_to_lists_async
+
 
 class Manager:
     """Класс управления программой"""
@@ -17,6 +20,7 @@ class Manager:
         self.wwhs = WorkWithHostStatus()
         self.wwlp = WorkWithLostPackets()
         self.list_of_hosts = dict()
+        self.mode_work = 'Threads'
 
     def add_host(self) -> None:
         data_from_db = self.wwh.read_all_data()
@@ -37,10 +41,11 @@ class Manager:
         return self.list_of_hosts.values()
 
     def check_available_all_hosts_with_threading(self):
+        self.mode_work = 'Threads'
         queue = Queue()
         threads = []
         for host in self.list_of_hosts.values():
-            sleep(.7)
+            sleep(.3)
             t = Thread(target=handle_info_about_host,
                        args=(str(host.id), host.ip_add, queue))
             t.start()
@@ -52,40 +57,85 @@ class Manager:
             results.append(queue.get())
         return results
 
+    def check_available_all_hosts_with_async(self):
+        self.mode_work = 'async'
+        hosts = self.list_of_hosts.values()
+        info_host = []
+        for host in hosts:
+            info_host.append((host.id, host.ip_add))
+        result = run_ping(info_host)
+        return result
+
+    def check_available_all_hosts_with_os_func_async(self):
+        self.mode_work = 'async_with_os_func'
+        hosts = self.list_of_hosts.values()
+        info_host = []
+        for host in hosts:
+            info_host.append((host.id, host.ip_add))
+        (online_hosts, online_hosts_with_error,
+         offline_hosts) = allocation_to_lists_async(info_host)
+        for host in online_hosts:  # online host
+            if host:
+                self.what_do_when_online(int(host[0]), host[2])
+        for host in online_hosts_with_error:  # online host with errors
+            if host:
+                self.what_do_when_online_with_errors(int(host[0]),
+                                                     host[2],
+                                                     host[3])
+        for host in offline_hosts:  # offline host
+            if host:
+                self.what_do_when_offline(int(host[0]))
+
     def allocation_to_lists(self):
+        # if self.mode_work == 'Threads':
         result = self.check_available_all_hosts_with_threading()
+        # elif self.mode_work == 'async':
+        #     result = self.check_available_all_hosts_with_async()
         online_hosts = []
         online_hosts_with_error = []
         offline_hosts = []
         errors = []
         for res in result:
-            if res[0] == 0:
+            if res[-1] == 'online':
                 online_hosts.append(res)
-            elif res[0] == 1:
+            elif res[-1] == 'online_with_error':
                 online_hosts_with_error.append(res)
-            elif res[0] == 2:
+            elif res[-1] == 'offline':
                 offline_hosts.append(res)
             else:
                 errors.append(res)
         return online_hosts, online_hosts_with_error, offline_hosts, errors
 
     def processing_lists(self):
-        lists = self.allocation_to_lists()
-        for host in lists[0]:  # online host
+        (online_hosts, online_hosts_with_error, offline_hosts,
+         errors) = self.allocation_to_lists()
+        for host in online_hosts:  # online host
             if host:
-                self.what_do_when_online(int(host[1]), host[3])
-        for host in lists[1]:  # online host with errors
+                average_delay = sum(host[2:5]) / 3
+                self.what_do_when_online(int(host[0]), average_delay)
+        for host in online_hosts_with_error:  # online host with errors
             if host:
-                self.what_do_when_online_with_errors(int(host[1]), host[3],
-                                                     host[4])
-        for host in lists[2]:  # offline host
+                lost_packets = 0
+                sum_delay = 0
+                for i in host[2:5]:
+                    print(f'{host[2:5]=}')
+                    if isinstance(i, float):
+                        sum_delay += i
+                    else:
+                        lost_packets += 1
+                average_delay = sum_delay / (3 - lost_packets)
+                self.what_do_when_online_with_errors(int(host[0]),
+                                                     average_delay,
+                                                     lost_packets)
+        for host in offline_hosts:  # offline host
             if host:
-                self.what_do_when_offline(int(host[1]))
-        if len(lists[3]) != 0:  # errors
+                self.what_do_when_offline(int(host[0]))
+        if len(errors) != 0:  # errors
             app_loger.error('Проблемы с сетевой картой или кабелем')
             PyVoice.say_computer_about_cable()
 
     def what_do_when_online(self, host: int, delay: float):
+
         current_host = self.list_of_hosts.get(host)
         current_host.setup_average_delay(delay)
         if current_host.status_host == 'online_with_error':
@@ -109,7 +159,7 @@ class Manager:
             self.wwhs.create(current_host.id, current_host.status_host)
         elif current_host.status_host == 'online':
             current_host.change_status_host_on_online_with_errors()
-        # self.wwlp.create(current_host.id, lost_pac)
+        self.wwlp.create(current_host.id, lost_pac)
         self.list_of_hosts[current_host.id] = current_host
 
     def what_do_when_offline(self, host: int):
@@ -131,31 +181,31 @@ class Manager:
 
     @staticmethod
     def play_alarm(host):
-        if host.engine_sound:
-            PyVoice.say_computer(host.name)
-        else:
-            playsound(f'program_voice/voice_files/{host.alarm}')
+        try:
+            if host.engine_sound:
+                PyVoice.say_computer(host.name)
+            else:
+                playsound(f'program_voice/voice_files/{host.alarm}')
+        except Exception as e:
+            app_loger.error(e)
+            print('play_alarm')
+            print(e)
 
     def start_program(self):
         pass
 
 
-def read_data():
-    data = manager.read_hosts_status()
-    for i in data:
-        print(i)
-    print('+'*60)
+# def read_data():
+#     data = manager.read_hosts_status()
+#     for i in data:
+#         print(i)
+#     print('+'*60)
 
 
 if __name__ == "__main__":
     manager = Manager()
-    manager.clear_list_of_hosts()
     manager.add_host()
-    read_data()
-    manager.processing_lists()
-    read_data()
-    manager.processing_lists()
-    read_data()
-    manager.start_program()
+    print(manager.check_available_all_hosts_with_os_func_async())
+    PyVoice.say_computer_about_cable()
 
 # so cool!

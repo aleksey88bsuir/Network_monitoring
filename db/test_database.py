@@ -97,7 +97,7 @@ def check_work_cascade_delete():
 
 
 if __name__ == "__main__":
-    start_test_table_host()
+    # start_test_table_host()
     # start_test_with_table_lost_packets()
     # start_test_with_table_inf_about_hosts()
-    # check_work_cascade_delete()
+    check_work_cascade_delete()

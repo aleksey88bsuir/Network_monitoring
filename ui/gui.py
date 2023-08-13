@@ -1,13 +1,13 @@
 # pyuic5 name.ui -o name.py
-
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import QBrush, QColor
-from PyQt5.QtWidgets import QTableWidgetItem, QDesktopWidget
+from PyQt5.QtWidgets import QTableWidgetItem, QDesktopWidget, QSizePolicy
 from ui.main_window import Ui_MainWindow
 from run_nm_for_gui import Monitoring
 from manager import Manager
 from ui.skins.skins import blue_dark
 from program_voice.python_voice import PyVoice
+from loger import app_loger
 
 
 class MyWindow(QtWidgets.QMainWindow):
@@ -41,6 +41,8 @@ class MyWindow(QtWidgets.QMainWindow):
         self.manager.add_host()
         self.hosts_data = self.manager.read_hosts_status()
         self.ui.tableWidget.setRowCount(len(self.hosts_data))
+        self.ui.tableWidget.setSizePolicy(QSizePolicy.Expanding,
+                                          QSizePolicy.Expanding)
         self.refresh_table()
 
     def set_volume_level(self):
@@ -68,18 +70,7 @@ class MyWindow(QtWidgets.QMainWindow):
                                         self.set_item_in_table(string,
                                                                'descr')
                                         )
-            if i != 4:
-                self.ui.tableWidget.resizeColumnsToContents()
         self.step += 1
-        size = self.size()
-        self.show_max_size_table(size)
-        self.ui.tableWidget.setRowCount(len(self.hosts_data))
-        self.ui.tableWidget.resizeRowsToContents()
-        table_height = (self.ui.tableWidget.verticalHeader().length() +
-                        self.ui.tableWidget.horizontalHeader().height())
-        self.setFixedHeight(table_height + 145)
-
-        self.ui.tableWidget.setMaximumHeight(self.monitor_height - 220)
 
     @staticmethod
     def set_item_in_table(host, host_atr):
@@ -107,20 +98,6 @@ class MyWindow(QtWidgets.QMainWindow):
 
     def open_modify_window(self):
         pass
-
-    def resizeEvent(self, event):
-        size = event.size()
-        self.show_max_size_table(size)
-
-    def show_max_size_table(self, size):
-        table_width = 0
-        for column in range(4):
-            self.ui.tableWidget.resizeColumnToContents(column)
-            table_width += self.ui.tableWidget.columnWidth(column)
-        # Растягиваем последний столбец на оставшуюся часть окна
-        last_column_width = (size.width() - table_width - 37)
-        self.ui.tableWidget.setColumnWidth(4, last_column_width)
-        self.ui.tableWidget.resize(size.width(), size.height())
 
 
 if __name__ == "__main__":
