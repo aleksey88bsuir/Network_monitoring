@@ -111,7 +111,7 @@ class Manager:
          errors) = self.allocation_to_lists()
         for host in online_hosts:  # online host
             if host:
-                average_delay = sum(host[2:5]) / 3
+                average_delay = round((sum(host[2:5]) / 3), 4)
                 self.what_do_when_online(int(host[0]), average_delay)
         for host in online_hosts_with_error:  # online host with errors
             if host:
@@ -123,7 +123,7 @@ class Manager:
                         sum_delay += i
                     else:
                         lost_packets += 1
-                average_delay = sum_delay / (3 - lost_packets)
+                average_delay = round((sum_delay / (3 - lost_packets)), 4)
                 self.what_do_when_online_with_errors(int(host[0]),
                                                      average_delay,
                                                      lost_packets)
