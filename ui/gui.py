@@ -7,7 +7,8 @@ from ui.main_window import Ui_MainWindow
 from run_nm_for_gui import Monitoring
 from manager import Manager
 from program_voice.python_voice import PyVoice
-from PyQt5.QtCore import QFile
+from PyQt5.QtCore import QFile, Qt
+from ui.edit_and_view import EditAndViewWindow
 from loger import app_loger
 
 
@@ -16,12 +17,14 @@ class MyWindow(QtWidgets.QMainWindow):
         super().__init__()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        self.style_sheet = None
         self.step = 0
         self.manager = Manager()
         self.ui.retranslateUi(self)
         self.monitoring = Monitoring(self)
         self.set_data()
         self.start_interface()
+        self.edit_and_view_window = EditAndViewWindow(self)
         self.hosts_data = None
         self.start_program = None
         self.mode = None
@@ -112,9 +115,6 @@ class MyWindow(QtWidgets.QMainWindow):
         self.update_status(f'Программа запущена. Продолжительность цикла до'
                            f' 15 секунд. Шаг №  {self.step}')
 
-        print(mode)
-
-        print(f'{self.mode=}')
         self.ui.cb_mode_work.setDisabled(True)
 
     def update_status(self, text):
@@ -130,8 +130,8 @@ class MyWindow(QtWidgets.QMainWindow):
         file = QFile(self.ui.cd_style.currentData())
         file.open(QFile.ReadOnly | QFile.Text)
         stream = file.readAll()
-        style_sheet = str(stream, encoding='utf-8')
-        self.setStyleSheet(style_sheet)
+        self.style_sheet = str(stream, encoding='utf-8')
+        self.setStyleSheet(self.style_sheet)
 
     @staticmethod
     def get_css_files(folder):
@@ -145,7 +145,11 @@ class MyWindow(QtWidgets.QMainWindow):
         return css_files
 
     def open_modify_window(self):
-        pass
+        self.edit_and_view_window.setWindowModality(Qt.ApplicationModal)
+        self.edit_and_view_window.setWindowTitle('Окно редактирования '
+                                                 '(промотра информации')
+        self.edit_and_view_window.setStyleSheet(self.style_sheet)
+        self.edit_and_view_window.exec()
 
 
 if __name__ == "__main__":

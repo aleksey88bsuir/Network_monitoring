@@ -10,7 +10,6 @@ def respond_query_data_and_transform(hosts):
     for string_host_info in string_list_hosts_info[:-1]:
         ip_add_pattern = r'Ping results for (\S+) with'
         id_pattern = r'Ping results for \S+ with id=(\d+):'
-        # head_pattern = r'Ping results for (\S+) with id=(\d+):'
         transmitted_pattern = r'(\d+) packets transmitted'
         received_pattern = r'(\d+) received'
         average_delay_pattern = r'min/avg/max/mdev = (\d+\.\d+)/(\d+\.\d+)/'

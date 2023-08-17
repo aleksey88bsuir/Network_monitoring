@@ -13,10 +13,3 @@ formatter = logging.Formatter("%(name)s %(asctime)s %(levelname)s %(message)s")
 handler.setFormatter(formatter)
 # добавление обработчика к логгеру
 app_loger.addHandler(handler)
-#
-# logger2.info(f"Testing the custom logger for module {__name__}...")
-#
-# logging.basicConfig(filename='app.log', level=logging.INFO,
-#                     format='%(asctime)s - %(levelname)s - %(message)s')
-
-

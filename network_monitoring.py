@@ -11,16 +11,14 @@ def __check_host(host_ip: str) -> tuple:
     :param host_ip: ip адрес хоста
     :return: Результат 3-х ping запросов в виде кортежа
     """
-    result = []
-    for i in range(3):
-        sleep(.2)
-        result.append(ping(host_ip))
-    return tuple(result)
-    # except Exception as e:
-    #     app_loger.critical(e)
-    #     print('__check_host')
-    #     print(e)
-
+    try:
+        result = []
+        for i in range(3):
+            sleep(.2)
+            result.append(ping(host_ip))
+        return tuple(result)
+    except Exception as e:
+        app_loger.critical(f'__check_host\n{e}')
 
 
 def handle_info_about_host(host_id: str, host_ip: str,
