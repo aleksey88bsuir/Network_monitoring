@@ -11,6 +11,7 @@ from playsound import playsound
 from temp import run_ping
 from time import sleep
 from parsing_answer import allocation_to_lists_async
+from list_of_hosts_we_work_with import read_current_hosts
 
 
 class Manager:
@@ -20,9 +21,10 @@ class Manager:
         self.wwhs = WorkWithHostStatus()
         self.wwlp = WorkWithLostPackets()
         self.list_of_hosts = dict()
+        self.fill_list_of_hosts = dict()
         self.mode_work = 'Threads'
 
-    def add_host(self) -> None:
+    def read_all_hosts(self) -> dict:
         data_from_db = self.wwh.read_all_data()
         for data_about_host in data_from_db:
             ping_obj = PingObject(
@@ -32,7 +34,22 @@ class Manager:
                 music=data_about_host.music,
                 description=data_about_host.descr,
             )
-            self.list_of_hosts[ping_obj.id] = ping_obj
+            self.fill_list_of_hosts[ping_obj.id] = ping_obj
+        return self.fill_list_of_hosts
+
+    def dict_of_hosts_we_work_with(self):
+        self.clear_list_of_hosts()
+        data = read_current_hosts()
+        for id_host in data:
+            host = self.wwh.read_info_about_host(id_host)
+            ping_obj = PingObject(
+                host_id=host.host_id,
+                ip_add=host.ip_add,
+                name=host.name,
+                music=host.music,
+                description=host.descr,
+            )
+            self.list_of_hosts[id_host] = ping_obj
 
     def clear_list_of_hosts(self):
         self.list_of_hosts = {}
@@ -87,10 +104,7 @@ class Manager:
                 self.what_do_when_offline(int(host[0]))
 
     def allocation_to_lists(self):
-        # if self.mode_work == 'Threads':
         result = self.check_available_all_hosts_with_threading()
-        # elif self.mode_work == 'async':
-        #     result = self.check_available_all_hosts_with_async()
         online_hosts = []
         online_hosts_with_error = []
         offline_hosts = []
@@ -118,7 +132,7 @@ class Manager:
                 lost_packets = 0
                 sum_delay = 0
                 for i in host[2:5]:
-                    print(f'{host[2:5]=}')
+                    # print(f'{host[2:5]=}')
                     if isinstance(i, float):
                         sum_delay += i
                     else:
@@ -135,7 +149,6 @@ class Manager:
             PyVoice.say_computer_about_cable()
 
     def what_do_when_online(self, host: int, delay: float):
-
         current_host = self.list_of_hosts.get(host)
         current_host.setup_average_delay(delay)
         if current_host.status_host == 'online_with_error':
@@ -187,25 +200,22 @@ class Manager:
             else:
                 playsound(f'program_voice/voice_files/{host.alarm}')
         except Exception as e:
-            app_loger.error(e)
-            print('play_alarm')
-            print(e)
-
-    def start_program(self):
-        pass
-
-
-# def read_data():
-#     data = manager.read_hosts_status()
-#     for i in data:
-#         print(i)
-#     print('+'*60)
+            app_loger.critical(f'play_alarm:{e}')
 
 
 if __name__ == "__main__":
     manager = Manager()
-    manager.add_host()
-    print(manager.check_available_all_hosts_with_os_func_async())
-    PyVoice.say_computer_about_cable()
+    # manager.add_all_hosts()
+    # print(manager.check_available_all_hosts_with_os_func_async())
+    # PyVoice.say_computer_about_cable()
+    manager.dict_of_hosts_we_work_with()
+    data1 = manager.read_hosts_status()
+    manager.clear_list_of_hosts()
+    manager.add_all_hosts()
+    data2 = manager.read_hosts_status()
+    print(data1)
+    print(data2)
+    print(data1 == data2)
+
 
 # so cool!

@@ -4,3 +4,4 @@ db/remote_hosts.db
 db/app.log
 app.log
 temp*
+db/current_hosts.txt

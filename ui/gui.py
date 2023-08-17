@@ -50,7 +50,8 @@ class MyWindow(QtWidgets.QMainWindow):
         self.ui.picture.setPixmap(pixmap)
 
     def set_data(self):
-        self.manager.add_host()
+        self.manager.dict_of_hosts_we_work_with()
+        # self.manager.add_all_hosts()
         self.hosts_data = self.manager.read_hosts_status()
         self.ui.tableWidget.setRowCount(len(self.hosts_data))
         self.refresh_table()
@@ -105,7 +106,6 @@ class MyWindow(QtWidgets.QMainWindow):
             self.mode = 'threads'
         else:
             self.mode = 'async'
-        print(f'In start_monitoring {self.mode=}')
         self.step = 1
         self.monitoring.run_program = True
         self.ui.b_start.setEnabled(False)
@@ -147,7 +147,7 @@ class MyWindow(QtWidgets.QMainWindow):
     def open_modify_window(self):
         self.edit_and_view_window.setWindowModality(Qt.ApplicationModal)
         self.edit_and_view_window.setWindowTitle('Окно редактирования '
-                                                 '(промотра информации')
+                                                 '(просмотра) информации')
         self.edit_and_view_window.setStyleSheet(self.style_sheet)
         self.edit_and_view_window.exec()
 

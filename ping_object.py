@@ -31,4 +31,4 @@ class PingObject:
         self.average_delay = delay
 
     def __str__(self):
-        return f'Объект с атрибутами: {self.__dict__}'
+        return f'{self.id} -- {self.name} -- {self.ip_add} -- {self.descr}'

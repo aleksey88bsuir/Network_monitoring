@@ -1,4 +1,3 @@
-from time import sleep
 from PyQt5.QtCore import QThread
 from loger import app_loger
 
@@ -12,7 +11,6 @@ class Monitoring(QThread):
     def run(self):
         try:
             while self.run_program:
-                sleep(0)  # сон между циклами
                 self.start_monitoring()
             self.app.ui.b_start.setEnabled(True)
             self.app.ui.b_modify.setEnabled(True)

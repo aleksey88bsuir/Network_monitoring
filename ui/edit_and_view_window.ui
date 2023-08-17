@@ -17,7 +17,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="widget">
       <attribute name="title">
@@ -25,57 +25,57 @@
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="l_search_string">
          <property name="text">
           <string>Строка поиска</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit"/>
+        <widget class="QLineEdit" name="search_line"/>
        </item>
        <item>
-        <widget class="QLabel" name="label_2">
+        <widget class="QLabel" name="l_list_with_access_hosts">
          <property name="text">
           <string>Список всех доступных узлов (хостов)</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QListWidget" name="listWidget"/>
+        <widget class="QListWidget" name="list_access_hosts"/>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
-          <widget class="QPushButton" name="pushButton">
+          <widget class="QPushButton" name="b_up">
            <property name="text">
             <string>Вверх</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_2">
+          <widget class="QPushButton" name="b_add">
            <property name="text">
             <string>Добавить</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_3">
+          <widget class="QPushButton" name="b_del">
            <property name="text">
             <string>Удалить</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_4">
+          <widget class="QPushButton" name="b_edit">
            <property name="text">
             <string>Редактировать</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_5">
+          <widget class="QPushButton" name="b_down">
            <property name="text">
             <string>Вниз</string>
            </property>
@@ -84,14 +84,14 @@
         </layout>
        </item>
        <item>
-        <widget class="QLabel" name="label_3">
+        <widget class="QLabel" name="l_list_of_hosts_to_work_with">
          <property name="text">
           <string>Список текущих узлов (хостов)</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QListWidget" name="listWidget_2"/>
+        <widget class="QListWidget" name="list_working_hosts"/>
        </item>
       </layout>
      </widget>
@@ -103,10 +103,10 @@
        <item>
         <layout class="QGridLayout" name="gridLayout">
          <item row="3" column="0">
-          <widget class="QListWidget" name="listWidget_5"/>
+          <widget class="QListWidget" name="list_with_access_hosts"/>
          </item>
          <item row="2" column="0">
-          <widget class="QLabel" name="label_8">
+          <widget class="QLabel" name="l_access_line">
            <property name="text">
             <string>Список всех доступных узлов (хостов)</string>
            </property>
@@ -117,54 +117,54 @@
            <item>
             <layout class="QVBoxLayout" name="verticalLayout">
              <item>
-              <widget class="QLabel" name="label_10">
+              <widget class="QLabel" name="l_with">
                <property name="text">
                 <string>С</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QDateTimeEdit" name="dateTimeEdit"/>
+              <widget class="QDateTimeEdit" name="start_date_and_time"/>
              </item>
             </layout>
            </item>
            <item>
             <layout class="QVBoxLayout" name="verticalLayout_4">
              <item>
-              <widget class="QLabel" name="label_11">
+              <widget class="QLabel" name="l_finish">
                <property name="text">
                 <string>По</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QDateTimeEdit" name="dateTimeEdit_2"/>
+              <widget class="QDateTimeEdit" name="finish_date_and_time"/>
              </item>
             </layout>
            </item>
           </layout>
          </item>
          <item row="5" column="0">
-          <widget class="QCheckBox" name="checkBox">
+          <widget class="QCheckBox" name="time_filter">
            <property name="text">
             <string>Включить фильтр времени</string>
            </property>
           </widget>
          </item>
          <item row="0" column="0">
-          <widget class="QLabel" name="label_7">
+          <widget class="QLabel" name="l_search_line">
            <property name="text">
             <string>Строка поиска</string>
            </property>
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QLineEdit" name="lineEdit_3"/>
+          <widget class="QLineEdit" name="search_edit"/>
          </item>
          <item row="4" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout_4">
            <item>
-            <widget class="QPushButton" name="pushButton_11">
+            <widget class="QPushButton" name="b_read_history_connection">
              <property name="text">
               <string>Посмотреть историю 
  подключений</string>
@@ -172,7 +172,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton_12">
+            <widget class="QPushButton" name="b_read_history_lp">
              <property name="text">
               <string>Посмотреть историю 
  потеряных пакетов</string>
@@ -180,7 +180,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="pushButton_13">
+            <widget class="QPushButton" name="b_view_packet_delay_graph">
              <property name="text">
               <string>Посмотреть график 
  задержки сигнала</string>

@@ -37,33 +37,34 @@ def handle_info_about_host(host_id: str, host_ip: str,
     запрашиваемого узла
     execution_code = offline: запрашиваемый узел недоступен
     """
-    info = __check_host(host_ip)
-    if any(elem is False for elem in info):
-        execution_code = 'error'
-        result = host_id, host_ip, *info, execution_code
-        if queue:
-            queue.put(result)
-        return result
+    try:
+        info = __check_host(host_ip)
+        if any(elem is False for elem in info):
+            execution_code = 'error'
+            result = host_id, host_ip, *info, execution_code
+            if queue:
+                queue.put(result)
+            return result
 
-    elif all(elem is None for elem in info):
-        execution_code = 'offline'
-        result = host_id, *info, execution_code
-        if queue:
-            queue.put(result)
-        return result
-    elif all(isinstance(elem, float) for elem in info):
-        execution_code = 'online'
-        result = host_id, host_ip, *info, execution_code
-        if queue:
-            queue.put(result)
-        return result
-    else:
-        execution_code = 'online_with_error'
-        result = host_id, host_ip, *info, execution_code
-        if queue:
-            queue.put(result)
-        return result
-    # except Exception as e:
-    #     app_loger.critical(e)
-    #     print('handle_info')
-    #     print(e)
+        elif all(elem is None for elem in info):
+            execution_code = 'offline'
+            result = host_id, *info, execution_code
+            if queue:
+                queue.put(result)
+            return result
+
+        elif all(isinstance(elem, float) for elem in info):
+            execution_code = 'online'
+            result = host_id, host_ip, *info, execution_code
+            if queue:
+                queue.put(result)
+            return result
+
+        else:
+            execution_code = 'online_with_error'
+            result = host_id, host_ip, *info, execution_code
+            if queue:
+                queue.put(result)
+            return result
+    except Exception as e:
+        app_loger.critical(f'handle_info_about_host \n {e}')
