@@ -13,189 +13,256 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_3">
-   <item>
-    <widget class="QTabWidget" name="tabWidget">
-     <property name="currentIndex">
-      <number>0</number>
-     </property>
-     <widget class="QWidget" name="widget">
-      <attribute name="title">
-       <string>Tab 1</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+  <widget class="QTabWidget" name="tabWidget">
+   <property name="geometry">
+    <rect>
+     <x>9</x>
+     <y>9</y>
+     <width>622</width>
+     <height>462</height>
+    </rect>
+   </property>
+   <property name="currentIndex">
+    <number>0</number>
+   </property>
+   <widget class="QWidget" name="widget">
+    <attribute name="title">
+     <string>Tab 1</string>
+    </attribute>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QLabel" name="l_search_string">
+       <property name="text">
+        <string>Строка поиска</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="search_line"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="l_list_with_access_hosts">
+       <property name="text">
+        <string>Список всех доступных узлов (хостов)</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QListWidget" name="list_access_hosts"/>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QLabel" name="l_search_string">
+        <widget class="QPushButton" name="b_up">
          <property name="text">
-          <string>Строка поиска</string>
+          <string>Вверх</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="search_line"/>
+        <widget class="QPushButton" name="b_save_changes">
+         <property name="text">
+          <string>Сохранить изменения</string>
+         </property>
+        </widget>
        </item>
        <item>
-        <widget class="QLabel" name="l_list_with_access_hosts">
+        <widget class="QPushButton" name="b_down">
+         <property name="text">
+          <string>Вниз</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QLabel" name="l_list_of_hosts_to_work_with">
+       <property name="text">
+        <string>Список текущих узлов (хостов)</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QListWidget" name="list_working_hosts"/>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="tab_2">
+    <attribute name="title">
+     <string>nnnnn</string>
+    </attribute>
+    <layout class="QVBoxLayout" name="verticalLayout_5">
+     <item>
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="3" column="0">
+        <widget class="QListWidget" name="list_with_access_hosts"/>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="l_access_line">
          <property name="text">
           <string>Список всех доступных узлов (хостов)</string>
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QListWidget" name="list_access_hosts"/>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout">
+       <item row="6" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
          <item>
-          <widget class="QPushButton" name="b_up">
-           <property name="text">
-            <string>Вверх</string>
-           </property>
-          </widget>
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <widget class="QLabel" name="l_with">
+             <property name="text">
+              <string>С</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QDateTimeEdit" name="start_date_and_time"/>
+           </item>
+          </layout>
          </item>
          <item>
-          <widget class="QPushButton" name="b_add">
-           <property name="text">
-            <string>Добавить</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="b_del">
-           <property name="text">
-            <string>Удалить</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="b_edit">
-           <property name="text">
-            <string>Редактировать</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="b_down">
-           <property name="text">
-            <string>Вниз</string>
-           </property>
-          </widget>
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <item>
+            <widget class="QLabel" name="l_finish">
+             <property name="text">
+              <string>По</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QDateTimeEdit" name="finish_date_and_time"/>
+           </item>
+          </layout>
          </item>
         </layout>
        </item>
-       <item>
-        <widget class="QLabel" name="l_list_of_hosts_to_work_with">
+       <item row="5" column="0">
+        <widget class="QCheckBox" name="time_filter">
          <property name="text">
-          <string>Список текущих узлов (хостов)</string>
+          <string>Включить фильтр времени</string>
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QListWidget" name="list_working_hosts"/>
+       <item row="0" column="0">
+        <widget class="QLabel" name="l_search_line">
+         <property name="text">
+          <string>Строка поиска</string>
+         </property>
+        </widget>
        </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="tab_2">
-      <attribute name="title">
-       <string>Tab 2</string>
-      </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_5">
-       <item>
-        <layout class="QGridLayout" name="gridLayout">
-         <item row="3" column="0">
-          <widget class="QListWidget" name="list_with_access_hosts"/>
-         </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="l_access_line">
+       <item row="1" column="0">
+        <widget class="QLineEdit" name="search_edit"/>
+       </item>
+       <item row="4" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <widget class="QPushButton" name="b_read_history_connection">
            <property name="text">
-            <string>Список всех доступных узлов (хостов)</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="0">
-          <layout class="QHBoxLayout" name="horizontalLayout_5">
-           <item>
-            <layout class="QVBoxLayout" name="verticalLayout">
-             <item>
-              <widget class="QLabel" name="l_with">
-               <property name="text">
-                <string>С</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QDateTimeEdit" name="start_date_and_time"/>
-             </item>
-            </layout>
-           </item>
-           <item>
-            <layout class="QVBoxLayout" name="verticalLayout_4">
-             <item>
-              <widget class="QLabel" name="l_finish">
-               <property name="text">
-                <string>По</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QDateTimeEdit" name="finish_date_and_time"/>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </item>
-         <item row="5" column="0">
-          <widget class="QCheckBox" name="time_filter">
-           <property name="text">
-            <string>Включить фильтр времени</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QLabel" name="l_search_line">
-           <property name="text">
-            <string>Строка поиска</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLineEdit" name="search_edit"/>
-         </item>
-         <item row="4" column="0">
-          <layout class="QHBoxLayout" name="horizontalLayout_4">
-           <item>
-            <widget class="QPushButton" name="b_read_history_connection">
-             <property name="text">
-              <string>Посмотреть историю 
+            <string>Посмотреть историю 
  подключений</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="b_read_history_lp">
-             <property name="text">
-              <string>Посмотреть историю 
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="b_read_history_lp">
+           <property name="text">
+            <string>Посмотреть историю 
  потеряных пакетов</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="b_view_packet_delay_graph">
-             <property name="text">
-              <string>Посмотреть график 
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="b_view_packet_delay_graph">
+           <property name="text">
+            <string>Посмотреть график 
  задержки сигнала</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
       </layout>
-     </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="tab">
+    <attribute name="title">
+     <string>Страница</string>
+    </attribute>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>67</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>TextLabel</string>
+     </property>
     </widget>
-   </item>
-  </layout>
+    <widget class="QLineEdit" name="lineEdit">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>113</width>
+       <height>25</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QTableView" name="tableView">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>70</y>
+       <width>256</width>
+       <height>192</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>290</y>
+       <width>89</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>PushButton</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_2">
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>290</y>
+       <width>89</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>PushButton</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_3">
+     <property name="geometry">
+      <rect>
+       <x>230</x>
+       <y>290</y>
+       <width>89</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>PushButton</string>
+     </property>
+    </widget>
+   </widget>
+  </widget>
  </widget>
  <resources/>
  <connections/>

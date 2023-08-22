@@ -9,7 +9,7 @@ from manager import Manager
 from program_voice.python_voice import PyVoice
 from PyQt5.QtCore import QFile, Qt
 from ui.edit_and_view import EditAndViewWindow
-from loger import app_loger
+# from loger import app_loger
 
 
 class MyWindow(QtWidgets.QMainWindow):
@@ -63,6 +63,7 @@ class MyWindow(QtWidgets.QMainWindow):
 
     def refresh_table(self):
         self.hosts_data = self.manager.read_hosts_status()
+        self.ui.tableWidget.setRowCount(len(self.hosts_data))
         for i, string in enumerate(self.hosts_data):
             self.ui.tableWidget.setItem(i, 0,
                                         self.set_item_in_table(string,
@@ -81,7 +82,6 @@ class MyWindow(QtWidgets.QMainWindow):
                                         self.set_item_in_table(string,
                                                                'descr')
                                         )
-
         self.ui.tableWidget.setSizePolicy(QSizePolicy.Expanding,
                                           QSizePolicy.Expanding)
 
@@ -149,6 +149,7 @@ class MyWindow(QtWidgets.QMainWindow):
         self.edit_and_view_window.setWindowTitle('Окно редактирования '
                                                  '(просмотра) информации')
         self.edit_and_view_window.setStyleSheet(self.style_sheet)
+        self.edit_and_view_window.init()
         self.edit_and_view_window.exec()
 
 
