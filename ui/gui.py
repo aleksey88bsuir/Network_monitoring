@@ -54,6 +54,8 @@ class MyWindow(QtWidgets.QMainWindow):
         # self.manager.add_all_hosts()
         self.hosts_data = self.manager.read_hosts_status()
         self.ui.tableWidget.setRowCount(len(self.hosts_data))
+        self.ui.tableWidget.setEditTriggers(
+            QtWidgets.QAbstractItemView.NoEditTriggers)
         self.refresh_table()
 
     def set_volume_level(self):
@@ -64,7 +66,6 @@ class MyWindow(QtWidgets.QMainWindow):
     def refresh_table(self):
         self.hosts_data = self.manager.read_hosts_status()
         self.ui.tableWidget.setRowCount(len(self.hosts_data))
-        print(self.hosts_data)
         for i, string in enumerate(self.hosts_data):
             self.ui.tableWidget.setItem(i, 0,
                                         self.set_item_in_table(string,
@@ -151,6 +152,7 @@ class MyWindow(QtWidgets.QMainWindow):
                                                  '(просмотра) информации')
         self.edit_and_view_window.setStyleSheet(self.style_sheet)
         self.edit_and_view_window.init()
+        self.edit_and_view_window.setWindowState(Qt.WindowFullScreen)
         self.edit_and_view_window.exec()
 
 

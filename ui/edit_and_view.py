@@ -1,4 +1,5 @@
 from PyQt5 import QtWidgets
+from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QBrush, QColor
 from PyQt5.QtWidgets import QListWidgetItem, QTableWidgetItem, QHeaderView, \
     QSizePolicy
@@ -62,7 +63,11 @@ class EditAndViewWindow(QtWidgets.QDialog):
         self.ui.b_read_history_lp.clicked.connect(self.read_history_lp)
         self.ui.b_view_packet_delay_graph.clicked.connect(
             self.view_packet_delay_graph)
+
         self.ui.t_all_hosts.cellClicked.connect(self.handle_cell_clicked)
+        self.ui.t_all_hosts.setEditTriggers(
+            QtWidgets.QAbstractItemView.NoEditTriggers)
+
         self.ui.b_save_changes.setDisabled(True)
         self.update_buttons_on_first_window()
         self.update_buttons_on_second_window()
@@ -191,9 +196,6 @@ class EditAndViewWindow(QtWidgets.QDialog):
     def update_date_in_tables_on_third_window(self):
         self.ui.t_all_hosts.setRowCount(len(self.current_hosts))
 
-        self.ui.t_all_hosts.setEditTriggers(
-            QtWidgets.QAbstractItemView.NoEditTriggers)
-
         self.ui.t_all_hosts.setHorizontalHeaderLabels(
             ['id','Имя хоста', 'IP-адрес хоста', 'Аварийный сигнал', 'Описание'])
         for i, string in enumerate(self.current_hosts):
@@ -225,11 +227,13 @@ class EditAndViewWindow(QtWidgets.QDialog):
          setSectionResizeMode(QHeaderView.ResizeToContents))
 
         self.ui.t_all_hosts.horizontalHeader().setStretchLastSection(True)
+        self.ui.t_all_hosts.setSortingEnabled(True)
 
     @staticmethod
     def set_item_in_table(host, host_atr):
-        item = QTableWidgetItem(f"{getattr(host, host_atr)}")
+        item = QTableWidgetItem()
         item.setForeground(QBrush(QColor('blue')))
+        item.setData(Qt.EditRole, getattr(host, host_atr))
         return item
 
     def parse_third_window(self, char):
