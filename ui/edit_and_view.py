@@ -1,5 +1,7 @@
 from PyQt5 import QtWidgets
-from PyQt5.QtWidgets import QListWidgetItem
+from PyQt5.QtGui import QBrush, QColor
+from PyQt5.QtWidgets import QListWidgetItem, QTableWidgetItem, QHeaderView, \
+    QSizePolicy
 from ui.edit_and_view_window import Ui_Dialog
 from search_host import HostsIter
 from list_of_hosts_we_work_with import write_current_hosts
@@ -14,6 +16,8 @@ class EditAndViewWindow(QtWidgets.QDialog):
         self.ui.retranslateUi(self)
         self.access_hosts = None
         self.working_hosts = None
+        self.all_hosts = None
+        self.current_hosts = None
         self.list_with_id_hosts = []
         self.hosts_iter_first_window = HostsIter()
         self.hosts_iter_second_window = HostsIter()
@@ -44,6 +48,8 @@ class EditAndViewWindow(QtWidgets.QDialog):
             self.handle_selection_change_access_list)
         self.ui.list_working_hosts.itemSelectionChanged.connect(
             self.handle_selection_change_work_list)
+        self.ui.list_with_access_hosts2.itemSelectionChanged.connect(
+            self.handle_selection_access_list2)
 
         self.ui.b_up.clicked.connect(self.move_up)
         self.ui.b_down.clicked.connect(self.move_down)
@@ -56,15 +62,18 @@ class EditAndViewWindow(QtWidgets.QDialog):
         self.ui.b_read_history_lp.clicked.connect(self.read_history_lp)
         self.ui.b_view_packet_delay_graph.clicked.connect(
             self.view_packet_delay_graph)
+        self.ui.t_all_hosts.cellClicked.connect(self.handle_cell_clicked)
         self.ui.b_save_changes.setDisabled(True)
         self.update_buttons_on_first_window()
         self.update_buttons_on_second_window()
         self.update_buttons_on_third_window()
 
     def set_data(self):
+        self.all_hosts = self.main_window.manager.read_all_hosts().values()
+
         self.access_hosts = \
             [str(host) for host
-             in self.main_window.manager.read_all_hosts().values()]
+             in self.all_hosts]
 
         self.working_hosts = \
             [str(host) for host
@@ -72,6 +81,11 @@ class EditAndViewWindow(QtWidgets.QDialog):
 
         for host in self.working_hosts:
             self.list_with_id_hosts.append(self.get_id_host(host))
+
+        for host in self.access_hosts:
+            self.hosts_iter_third_window.add_new_host(host)
+
+        self.current_hosts = self.all_hosts
 
     @staticmethod
     def get_id_host(info_string):
@@ -140,8 +154,9 @@ class EditAndViewWindow(QtWidgets.QDialog):
 
 # _________second_window____________________________
     def update_buttons_on_second_window(self):
-        self.ui.b_down.setDisabled(True)
-        self.ui.b_up.setDisabled(True)
+        self.ui.b_read_history_connection.setDisabled(True)
+        self.ui.b_read_history_lp.setDisabled(True)
+        self.ui.b_view_packet_delay_graph.setDisabled(True)
 
     def update_date_in_tables_on_second_window(self):
         for host in self.access_hosts:
@@ -158,6 +173,11 @@ class EditAndViewWindow(QtWidgets.QDialog):
             item_ = QListWidgetItem(string_item)
             self.ui.list_with_access_hosts2.addItem(item_)
 
+    def handle_selection_access_list2(self):
+        self.ui.b_read_history_connection.setDisabled(False)
+        self.ui.b_read_history_lp.setDisabled(False)
+        self.ui.b_view_packet_delay_graph.setDisabled(False)
+
     def read_history_connection(self):
         pass
 
@@ -169,18 +189,66 @@ class EditAndViewWindow(QtWidgets.QDialog):
 # _________third_window____________________________
 
     def update_date_in_tables_on_third_window(self):
-        pass
+        self.ui.t_all_hosts.setRowCount(len(self.current_hosts))
+
+        self.ui.t_all_hosts.setEditTriggers(
+            QtWidgets.QAbstractItemView.NoEditTriggers)
+
+        self.ui.t_all_hosts.setHorizontalHeaderLabels(
+            ['id','Имя хоста', 'IP-адрес хоста', 'Аварийный сигнал', 'Описание'])
+        for i, string in enumerate(self.current_hosts):
+            self.ui.t_all_hosts.setItem(i, 0,
+                                        self.set_item_in_table(string,
+                                                               'id'))
+            self.ui.t_all_hosts.setItem(i, 1,
+                                        self.set_item_in_table(string,
+                                                               'name'))
+            self.ui.t_all_hosts.setItem(i, 2,
+                                        self.set_item_in_table(string,
+                                                               'ip_add'))
+            self.ui.t_all_hosts.setItem(i, 3,
+                                        self.set_item_in_table(string,
+                                                               'alarm')
+                                        )
+            self.ui.t_all_hosts.setItem(i, 4,
+                                        self.set_item_in_table(string,
+                                                               'descr')
+                                        )
+
+        self.ui.t_all_hosts.setSizePolicy(QSizePolicy.Expanding,
+                                          QSizePolicy.Expanding)
+
+        (self.ui.t_all_hosts.horizontalHeader().
+         setSectionResizeMode(QHeaderView.ResizeToContents))
+
+        (self.ui.t_all_hosts.verticalHeader().
+         setSectionResizeMode(QHeaderView.ResizeToContents))
+
+        self.ui.t_all_hosts.horizontalHeader().setStretchLastSection(True)
+
+    @staticmethod
+    def set_item_in_table(host, host_atr):
+        item = QTableWidgetItem(f"{getattr(host, host_atr)}")
+        item.setForeground(QBrush(QColor('blue')))
+        return item
 
     def parse_third_window(self, char):
-        # self.ui.list_with_access_hosts2.clear()
-        # data = []
-        # for item in self.hosts_iter_second_window:
-        #     if char.lower() in item.lower():
-        #         data.append(item)
-        # for string_item in data:
-        #     item_ = QListWidgetItem(string_item)
-        #     self.ui.list_with_access_hosts2.addItem(item_)
-        pass
+        self.ui.t_all_hosts.clear()
+        data = []
+        for item in self.hosts_iter_third_window:
+            if char.lower() in item.lower():
+                data.append(int(self.get_id_host(item)))
+        data_with_hosts = []
+        for host in self.all_hosts:
+            if host.id in data:
+                data_with_hosts.append(host)
+        self.current_hosts = data_with_hosts
+        self.update_date_in_tables_on_third_window()
+
+    def handle_cell_clicked(self, row, column):
+        item = self.ui.t_all_hosts.item(row, 0)
+        if item is not None:
+            print(item.text())
 
     def update_buttons_on_third_window(self):
         self.ui.b_del.setDisabled(True)

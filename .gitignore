@@ -5,5 +5,5 @@ db/app.log
 app.log
 temp*
 db/current_hosts.txt
-ui/test_gui.py
+ui/sortable_table.py
 ui/edit_and_view_window2.ui

@@ -64,6 +64,7 @@ class MyWindow(QtWidgets.QMainWindow):
     def refresh_table(self):
         self.hosts_data = self.manager.read_hosts_status()
         self.ui.tableWidget.setRowCount(len(self.hosts_data))
+        print(self.hosts_data)
         for i, string in enumerate(self.hosts_data):
             self.ui.tableWidget.setItem(i, 0,
                                         self.set_item_in_table(string,
