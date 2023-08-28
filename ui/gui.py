@@ -152,7 +152,7 @@ class MyWindow(QtWidgets.QMainWindow):
                                                  '(просмотра) информации')
         self.edit_and_view_window.setStyleSheet(self.style_sheet)
         self.edit_and_view_window.init()
-        self.edit_and_view_window.setWindowState(Qt.WindowFullScreen)
+        # self.edit_and_view_window.setWindowState(Qt.WindowFullScreen)
         self.edit_and_view_window.exec()
 
 

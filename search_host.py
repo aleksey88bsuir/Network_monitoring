@@ -26,3 +26,6 @@ class HostsIter:
         else:
             raise StopIteration()
         return result
+
+    def clear(self):
+        self.__data = list()
