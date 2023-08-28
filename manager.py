@@ -25,6 +25,7 @@ class Manager:
         self.mode_work = 'Threads'
 
     def read_all_hosts(self) -> dict:
+        self.fill_list_of_hosts = dict()
         data_from_db = self.wwh.read_all_data()
         for data_about_host in data_from_db:
             ping_obj = PingObject(

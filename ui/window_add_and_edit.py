@@ -32,7 +32,6 @@ class AddAndEditWindow(QtWidgets.QDialog):
         host_name = self.ui.name_edit.text()
         alarm = self.ui.alarm_edit.text()
         descr = self.ui.descr_edit.toPlainText()
-        print(ip_add, host_name, alarm, descr)
         if self.__validate_ip_add(ip_add) and self.__validate_name(host_name):
             self.edit_and_view_window.main_window.manager.wwh.create(
                 {'ip_add': ip_add,
@@ -41,6 +40,9 @@ class AddAndEditWindow(QtWidgets.QDialog):
                  'descr': descr}
             )
             self.close()
+            self.edit_and_view_window.clear_setting_data()
+            self.edit_and_view_window.set_data()
+            self.edit_and_view_window.all_update()
 
     def __validate_ip_add(self, ip_add: str) -> bool:
         if not self.ui.checkBox.isChecked():

@@ -20,6 +20,7 @@ class EditAndViewWindow(QtWidgets.QDialog):
         self.working_hosts = None
         self.all_hosts = None
         self.current_hosts = None
+        self.id_host_in_table = None
         self.list_with_id_hosts = []
         self.hosts_iter_first_window = HostsIter()
         self.hosts_iter_second_window = HostsIter()
@@ -77,6 +78,7 @@ class EditAndViewWindow(QtWidgets.QDialog):
 
     def set_data(self):
         self.all_hosts = self.main_window.manager.read_all_hosts().values()
+
         self.access_hosts = \
             [str(host) for host
              in self.all_hosts]
@@ -92,6 +94,14 @@ class EditAndViewWindow(QtWidgets.QDialog):
             self.hosts_iter_third_window.add_new_host(host)
 
         self.current_hosts = self.all_hosts
+
+    def clear_setting_data(self):
+        self.access_hosts = None
+        self.working_hosts = None
+        self.all_hosts = None
+        self.current_hosts = None
+        self.id_host_in_table = None
+        self.list_with_id_hosts = []
 
     @staticmethod
     def get_id_host(info_string):
@@ -196,6 +206,7 @@ class EditAndViewWindow(QtWidgets.QDialog):
 # _________third_window____________________________
 
     def update_date_in_tables_on_third_window(self):
+        self.ui.t_all_hosts.clear()
         self.ui.t_all_hosts.setRowCount(len(self.current_hosts))
 
         self.ui.t_all_hosts.setHorizontalHeaderLabels(
@@ -254,7 +265,9 @@ class EditAndViewWindow(QtWidgets.QDialog):
     def handle_cell_clicked(self, row, column):
         item = self.ui.t_all_hosts.item(row, 0)
         if item is not None:
-            print(item.text())
+            self.id_host_in_table = int(item.text())
+            self.ui.b_del.setDisabled(False)
+            self.ui.b_edit.setDisabled(False)
 
     def update_buttons_on_third_window(self):
         self.ui.b_del.setDisabled(True)
@@ -268,17 +281,14 @@ class EditAndViewWindow(QtWidgets.QDialog):
         self.window_add_and_edit.exec()
 
     def del_host(self):
-        # selected_item = self.ui.list_working_hosts.currentItem()
-        # host_id = self.get_id_host(selected_item.text())
-        # self.access_hosts.remove(host_id)
-        # if host_id in self.list_with_id_hosts:
-        #     self.list_with_id_hosts.remove(host_id)
-        #     self.working_hosts.remove(host_id)
-        #     self.save_changes()
-        # # self.main_window.wwh.delete_host(host_id)
-        # self.update_buttons_on_third_window()
-        # self.update_date_in_tables_on_first_window()
-        pass
+        # self.access_hosts.remove(self.id_host_in_table)
+        if str(self.id_host_in_table) in self.list_with_id_hosts:
+            self.list_with_id_hosts.remove(str(self.id_host_in_table))
+            self.save_changes()
+        self.main_window.manager.wwh.delete_host(self.id_host_in_table)
+        self.clear_setting_data()
+        self.set_data()
+        self.all_update()
 
     def edit_host(self):
         selected_item = self.ui.list_working_hosts.currentItem()
