@@ -82,7 +82,6 @@ class EditAndViewWindow(QtWidgets.QDialog):
         self.access_hosts = \
             [str(host) for host
              in self.all_hosts]
-
         self.working_hosts = \
             [str(host) for host
              in self.main_window.manager.read_hosts_status()]
@@ -96,6 +95,12 @@ class EditAndViewWindow(QtWidgets.QDialog):
         self.current_hosts = self.all_hosts
 
     def clear_setting_data(self):
+        self.hosts_iter_first_window.clear()
+        self.hosts_iter_second_window.clear()
+        self.hosts_iter_third_window.clear()
+        self.ui.search_line.clear()
+        self.ui.search_line_2.clear()
+        self.ui.search_edit_2.clear()
         self.access_hosts = None
         self.working_hosts = None
         self.all_hosts = None
@@ -115,9 +120,15 @@ class EditAndViewWindow(QtWidgets.QDialog):
     def update_date_in_tables_on_first_window(self):
         self.ui.list_access_hosts.clear()
         self.ui.list_working_hosts.clear()
+        self.hosts_iter_first_window.clear()
         for host in self.access_hosts:
             self.hosts_iter_first_window.add_new_host(str(host))
             self.ui.list_access_hosts.addItem(QListWidgetItem(str(host)))
+        for host in self.working_hosts:
+            self.ui.list_working_hosts.addItem(QListWidgetItem(str(host)))
+
+    def update_data_in_table_working_hosts(self):
+        self.ui.list_working_hosts.clear()
         for host in self.working_hosts:
             self.ui.list_working_hosts.addItem(QListWidgetItem(str(host)))
 
@@ -152,15 +163,19 @@ class EditAndViewWindow(QtWidgets.QDialog):
         self.update_date_in_tables_on_first_window()
         self.update_buttons_on_first_window()
         self.ui.b_save_changes.setDisabled(False)
+        self.ui.search_line.clear()
 
     def move_down(self):
         host_id = self.get_id_host(self.selected_item.text())
         if host_id not in self.list_with_id_hosts:
             self.list_with_id_hosts.append(host_id)
             self.working_hosts.append(self.selected_item.text())
+        if self.ui.search_line.text():
+            self.update_data_in_table_working_hosts()
+        else:
             self.update_date_in_tables_on_first_window()
-            self.update_buttons_on_first_window()
-            self.ui.b_save_changes.setDisabled(False)
+        self.update_buttons_on_first_window()
+        self.ui.b_save_changes.setDisabled(False)
 
     def save_changes(self):
         write_current_hosts(self.list_with_id_hosts)
@@ -277,11 +292,10 @@ class EditAndViewWindow(QtWidgets.QDialog):
         self.window_add_and_edit.setWindowModality(Qt.ApplicationModal)
         self.window_add_and_edit.setWindowTitle('Окно добавления узла')
         self.window_add_and_edit.setStyleSheet(self.main_window.style_sheet)
-        self.window_add_and_edit.init()
+        self.window_add_and_edit.init_add_host()
         self.window_add_and_edit.exec()
 
     def del_host(self):
-        # self.access_hosts.remove(self.id_host_in_table)
         if str(self.id_host_in_table) in self.list_with_id_hosts:
             self.list_with_id_hosts.remove(str(self.id_host_in_table))
             self.save_changes()
@@ -291,5 +305,8 @@ class EditAndViewWindow(QtWidgets.QDialog):
         self.all_update()
 
     def edit_host(self):
-        selected_item = self.ui.list_working_hosts.currentItem()
-        host_id = self.get_id_host(selected_item.text())
+        self.window_add_and_edit.setWindowModality(Qt.ApplicationModal)
+        self.window_add_and_edit.setWindowTitle('Окно редактирования узла')
+        self.window_add_and_edit.setStyleSheet(self.main_window.style_sheet)
+        self.window_add_and_edit.init_edit_host(self.id_host_in_table)
+        self.window_add_and_edit.exec()
