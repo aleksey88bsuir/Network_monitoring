@@ -8,7 +8,6 @@ from threading import Thread
 from loger import app_loger
 from program_voice.python_voice import PyVoice
 from playsound import playsound
-from temp import run_ping
 from time import sleep
 from parsing_answer import allocation_to_lists_async
 from list_of_hosts_we_work_with import read_current_hosts
@@ -75,14 +74,14 @@ class Manager:
             results.append(queue.get())
         return results
 
-    def check_available_all_hosts_with_async(self):
-        self.mode_work = 'async'
-        hosts = self.list_of_hosts.values()
-        info_host = []
-        for host in hosts:
-            info_host.append((host.id, host.ip_add))
-        result = run_ping(info_host)
-        return result
+    # def check_available_all_hosts_with_async(self):
+    #     self.mode_work = 'async'
+    #     hosts = self.list_of_hosts.values()
+    #     info_host = []
+    #     for host in hosts:
+    #         info_host.append((host.id, host.ip_add))
+    #     result = run_ping(info_host)
+    #     return result
 
     def check_available_all_hosts_with_os_func_async(self):
         self.mode_work = 'async_with_os_func'
@@ -214,9 +213,3 @@ if __name__ == "__main__":
     manager.clear_list_of_hosts()
     manager.add_all_hosts()
     data2 = manager.read_hosts_status()
-    print(data1)
-    print(data2)
-    print(data1 == data2)
-
-
-# so cool!
