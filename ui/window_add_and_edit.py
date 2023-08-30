@@ -12,14 +12,12 @@ class AddAndEditWindow(QtWidgets.QDialog):
         self.ui.retranslateUi(self)
 
     def init_add_host(self):
-        self.ui.ip_add_edit.setText('')
-        self.ui.name_edit.setText('')
-        self.ui.alarm_edit.setText('')
-        self.ui.descr_edit.setText('')
+        self.default_setting()
         self.ui.b_ok.clicked.connect(self.add_host)
         self.start_interface()
 
     def init_edit_host(self, host_id):
+        self.default_setting()
         self.edit_host = (self.edit_and_view_window.main_window.manager.wwh.
                 read_info_about_host(host_id))
         self.ui.ip_add_edit.setText(self.edit_host.ip_add)
@@ -78,8 +76,13 @@ class AddAndEditWindow(QtWidgets.QDialog):
         return True
 
     def close_window(self):
-        self.ui.ip_add_edit.setText('')
-        self.ui.name_edit.setText('')
-        self.ui.alarm_edit.setText('')
-        self.ui.descr_edit.setText('')
+        self.default_setting()
         self.close()
+
+    def default_setting(self):
+        self.ui.ip_add_edit.clear()
+        self.ui.name_edit.clear()
+        self.ui.alarm_edit.clear()
+        self.ui.descr_edit.clear()
+        self.ui.l_warning_name.clear()
+        self.ui.l_warning_ip_add.clear()

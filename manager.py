@@ -132,7 +132,6 @@ class Manager:
                 lost_packets = 0
                 sum_delay = 0
                 for i in host[2:5]:
-                    # print(f'{host[2:5]=}')
                     if isinstance(i, float):
                         sum_delay += i
                     else:
@@ -205,9 +204,6 @@ class Manager:
 
 if __name__ == "__main__":
     manager = Manager()
-    # manager.add_all_hosts()
-    # print(manager.check_available_all_hosts_with_os_func_async())
-    # PyVoice.say_computer_about_cable()
     manager.dict_of_hosts_we_work_with()
     data1 = manager.read_hosts_status()
     manager.clear_list_of_hosts()

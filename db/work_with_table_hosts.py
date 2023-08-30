@@ -65,7 +65,6 @@ class WorkWithHosts:
 
     @staticmethod
     def delete_host(host_id: Hosts) -> None:
-        print(host_id)
         with Session() as session:
             host_for_del = session.query(Hosts).\
                     filter(Hosts.host_id == host_id).first()

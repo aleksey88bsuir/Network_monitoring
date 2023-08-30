@@ -28,41 +28,12 @@ def start_test_table_host():
     for host in data_list:
         wwh.create(host)
 
-    # update_host = None
-    # data = wwh.read_all_data()
-    # for k, i in enumerate(data):
-    #     print(i.name, i.ip_add)
-    #     if k == 2:
-    #         update_host = i
-    #
-    # update_host.name = 'New_SIP_server'
-    # update_host.ip_add = '192.175.15.212'
-    # update_host.descr = 'AAA'
-    # update_host.music = 'misic_file'
-    #
-    # wwh.update_host(update_host)
-
-    # data = wwh.read_all_data()
-    # for k, i in enumerate(data):
-    #     print(i.name, i.ip_add)
-    #
-    # print('++'*30)
-    # print(wwh.read_info_about_host(2))
-
-    # for i in data:
-    #     wwh.delete_host(i)
-
 
 def start_test_with_table_lost_packets():
     wwlp = WorkWithLostPackets()
     wwlp.create(1, 1)
     wwlp.create(2, 2)
     wwlp.create(1, 2)
-    # for i in wwlp.read_all_data():
-    #     print(i)
-    #     print('-'*30)
-    # print(wwlp.read_info_about_host(1))
-    # print(wwlp.read_info_about_host(2))
 
 
 def start_test_with_table_inf_about_hosts():
@@ -70,12 +41,6 @@ def start_test_with_table_inf_about_hosts():
     wwhs.create(1, 'online')
     wwhs.create(2, 'online')
     wwhs.create(1, 'offline')
-    # for i in wwhs.read_all_data():
-    #     print(i)
-    #     print('-'*30)
-    # print(wwhs.read_info_about_host(1))
-    # print(wwhs.read_info_about_host(2))
-    #
 
 
 def check_work_cascade_delete():
