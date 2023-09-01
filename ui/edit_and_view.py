@@ -157,26 +157,28 @@ class EditAndViewWindow(QtWidgets.QDialog):
         self.ui.b_up.setDisabled(True)
 
     def move_up(self):
-        host_id = self.get_id_host(self.selected_item.text())
-        self.list_with_id_hosts.remove(host_id)
-        self.working_hosts.remove(self.selected_item.text())
-        self.update_date_in_tables_on_first_window()
-        self.update_buttons_on_first_window()
-        self.ui.b_save_changes.setDisabled(False)
-        self.ui.search_line.clear()
+        self.host_id = self.get_id_host(self.selected_item.text())
+        if self.host_id:
+            self.list_with_id_hosts.remove(self.host_id)
+            self.working_hosts.remove(self.selected_item.text())
+            self.update_date_in_tables_on_first_window()
+            self.update_buttons_on_first_window()
+            self.ui.b_save_changes.setDisabled(False)
+            self.ui.search_line.clear()
 
     def move_down(self):
         try:
-            host_id = self.get_id_host(self.selected_item.text())
-            if host_id not in self.list_with_id_hosts:
-                self.list_with_id_hosts.append(host_id)
-                self.working_hosts.append(self.selected_item.text())
-            if self.ui.search_line.text():
-                self.update_data_in_table_working_hosts()
-            else:
-                self.update_date_in_tables_on_first_window()
-            self.update_buttons_on_first_window()
-            self.ui.b_save_changes.setDisabled(False)
+            self.host_id = self.get_id_host(self.selected_item.text())
+            if self.host_id:
+                if self.host_id not in self.list_with_id_hosts:
+                    self.list_with_id_hosts.append(self.host_id)
+                    self.working_hosts.append(self.selected_item.text())
+                if self.ui.search_line.text():
+                    self.update_data_in_table_working_hosts()
+                else:
+                    self.update_date_in_tables_on_first_window()
+                self.update_buttons_on_first_window()
+                self.ui.b_save_changes.setDisabled(False)
         except RuntimeError:
             print('RuntimeError: wrapped C/C++ object of type QListWidgetItem'
                   ' has been deleted')
