@@ -13,3 +13,27 @@ formatter = logging.Formatter("%(name)s %(asctime)s %(levelname)s %(message)s")
 handler.setFormatter(formatter)
 # добавление обработчика к логгеру
 app_loger.addHandler(handler)
+
+
+def log_exceptions(logger):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            try:
+                result = func(*args, **kwargs)
+                return result
+            except Exception as e:
+                logger.error(f"Ошибка в функции {func.__name__}: {e}")
+                logger.error(f"Входные данные: {args}, {kwargs}")
+                raise
+        return wrapper
+    return decorator
+
+
+@log_exceptions(logger=app_loger)
+def my_function(x, y):
+    return x / y
+
+
+if __name__ == "__main__":
+    result = my_function(10, 0)
+

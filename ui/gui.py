@@ -10,7 +10,7 @@ from manager import Manager
 from program_voice.python_voice import PyVoice
 from PyQt5.QtCore import QFile, Qt
 from ui.edit_and_view import EditAndViewWindow
-# from loger import app_loger
+from loger import app_loger, log_exceptions
 
 
 class MyWindow(QtWidgets.QMainWindow):
@@ -30,6 +30,7 @@ class MyWindow(QtWidgets.QMainWindow):
         self.start_program = None
         self.mode = None
 
+    @log_exceptions(logger=app_loger)
     def start_interface(self):
         self.ui.b_start.clicked.connect(self.start_monitoring)
         self.ui.b_stop.clicked.connect(self.stop_monitoring)
@@ -50,6 +51,7 @@ class MyWindow(QtWidgets.QMainWindow):
         pixmap = QPixmap('ui/pics_for_gui/r-443.png')
         self.ui.picture.setPixmap(pixmap)
 
+    @log_exceptions(logger=app_loger)
     def set_data(self):
         self.manager.dict_of_hosts_we_work_with()
         self.hosts_data = self.manager.read_hosts_status()
@@ -57,11 +59,13 @@ class MyWindow(QtWidgets.QMainWindow):
             QtWidgets.QAbstractItemView.NoEditTriggers)
         self.refresh_table()
 
+    @log_exceptions(logger=app_loger)
     def set_volume_level(self):
         level = self.ui.q_volume_cont.value()
         self.ui.l_volume.setText(f'{level} %')
         PyVoice.volume_level = level/100
 
+    @log_exceptions(logger=app_loger)
     def refresh_table(self):
         self.hosts_data = self.manager.read_hosts_status()
         self.ui.tableWidget.setRowCount(len(self.hosts_data))
@@ -96,11 +100,13 @@ class MyWindow(QtWidgets.QMainWindow):
         self.step += 1
 
     @staticmethod
+    @log_exceptions(logger=app_loger)
     def set_item_in_table(host, host_atr):
         item = QTableWidgetItem(f"{getattr(host, host_atr)}")
         item.setForeground(QBrush(QColor(host.color)))
         return item
 
+    @log_exceptions(logger=app_loger)
     def start_monitoring(self):
         if self.__can_start():
             mode = self.ui.cb_mode_work.currentText()
@@ -114,20 +120,23 @@ class MyWindow(QtWidgets.QMainWindow):
             self.ui.b_modify.setEnabled(False)
             self.ui.b_stop.setEnabled(True)
             self.monitoring.start()
-            self.update_status(f'Программа запущена. Продолжительность цикла до'
-                               f' 15 секунд. Шаг №  {self.step}')
+            self.update_status(f'Программа запущена. Продолжительность цикла '
+                               f'до 15 секунд. Шаг №  {self.step}')
 
             self.ui.cb_mode_work.setDisabled(True)
 
+    @log_exceptions(logger=app_loger)
     def update_status(self, text):
         self.ui.statusbar.showMessage(text)
 
+    @log_exceptions(logger=app_loger)
     def stop_monitoring(self):
         self.monitoring.run_program = False
         self.ui.b_stop.setEnabled(False)
         self.update_status('Программа останавливается. Пожалуйста ожидайте')
         self.ui.cb_mode_work.setDisabled(False)
 
+    @log_exceptions(logger=app_loger)
     def change_style(self):
         file = QFile(self.ui.cd_style.currentData())
         file.open(QFile.ReadOnly | QFile.Text)
@@ -136,6 +145,7 @@ class MyWindow(QtWidgets.QMainWindow):
         self.setStyleSheet(self.style_sheet)
 
     @staticmethod
+    @log_exceptions(logger=app_loger)
     def get_css_files(folder):
         import os
         css_files = dict()
@@ -146,6 +156,7 @@ class MyWindow(QtWidgets.QMainWindow):
                                                                       file)
         return css_files
 
+    @log_exceptions(logger=app_loger)
     def open_modify_window(self):
         self.edit_and_view_window.setWindowModality(Qt.ApplicationModal)
         self.edit_and_view_window.setWindowTitle('Окно редактирования '
@@ -156,6 +167,7 @@ class MyWindow(QtWidgets.QMainWindow):
         self.edit_and_view_window.setWindowState(Qt.WindowFullScreen)
         self.edit_and_view_window.exec()
 
+    @log_exceptions(logger=app_loger)
     def __can_start(self):
         hosts = self.manager.read_hosts_status()
         if len(hosts) == 0:
@@ -166,12 +178,13 @@ class MyWindow(QtWidgets.QMainWindow):
         music_files = get_music_file('program_voice/voice_files/')
         for host in hosts:
             if host.alarm not in music_files:
-                QMessageBox.information(self,
-                                    "Программа не может быть запущена!!!",
-                                    f"Отсутствует музыкальный файл \n"
-                                    f"{host.alarm} y хоста {host.name} в"
-                                    f"папке с музыкой. Измените данные"
-                                    )
+                QMessageBox.information(
+                    self,
+                    "Программа не может быть запущена!!!",
+                    f"Отсутствует музыкальный файл \n"
+                    f"{host.alarm} y хоста {host.name} в"
+                    f"папке с музыкой. Измените данные"
+                    )
                 return False
         return True
 
