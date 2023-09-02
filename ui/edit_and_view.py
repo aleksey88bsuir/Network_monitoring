@@ -262,7 +262,8 @@ class EditAndViewWindow(QtWidgets.QDialog):
         self.ui.t_all_hosts.setRowCount(len(self.current_hosts))
 
         self.ui.t_all_hosts.setHorizontalHeaderLabels(
-            ['id', 'Имя хоста', 'IP-адрес хоста', 'Аварийный сигнал', 'Описание'])
+            ['id', 'Имя хоста', 'IP-адрес хоста',
+             'Аварийный сигнал', 'Описание'])
         for i, string in enumerate(self.current_hosts):
             self.ui.t_all_hosts.setItem(i, 0,
                                         self.set_item_in_table(string,

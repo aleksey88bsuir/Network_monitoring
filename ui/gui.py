@@ -2,9 +2,10 @@
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import QBrush, QColor, QPixmap
 from PyQt5.QtWidgets import QTableWidgetItem, QSizePolicy, \
-    QHeaderView
+    QHeaderView, QMessageBox
 from ui.main_window import Ui_MainWindow
 from run_nm_for_gui import Monitoring
+from func_for_gui import get_music_file
 from manager import Manager
 from program_voice.python_voice import PyVoice
 from PyQt5.QtCore import QFile, Qt
@@ -51,9 +52,7 @@ class MyWindow(QtWidgets.QMainWindow):
 
     def set_data(self):
         self.manager.dict_of_hosts_we_work_with()
-        # self.manager.add_all_hosts()
         self.hosts_data = self.manager.read_hosts_status()
-        self.ui.tableWidget.setRowCount(len(self.hosts_data))
         self.ui.tableWidget.setEditTriggers(
             QtWidgets.QAbstractItemView.NoEditTriggers)
         self.refresh_table()
@@ -103,21 +102,22 @@ class MyWindow(QtWidgets.QMainWindow):
         return item
 
     def start_monitoring(self):
-        mode = self.ui.cb_mode_work.currentText()
-        if mode == 'Многопоточный':
-            self.mode = 'threads'
-        else:
-            self.mode = 'async'
-        self.step = 1
-        self.monitoring.run_program = True
-        self.ui.b_start.setEnabled(False)
-        self.ui.b_modify.setEnabled(False)
-        self.ui.b_stop.setEnabled(True)
-        self.monitoring.start()
-        self.update_status(f'Программа запущена. Продолжительность цикла до'
-                           f' 15 секунд. Шаг №  {self.step}')
+        if self.__can_start():
+            mode = self.ui.cb_mode_work.currentText()
+            if mode == 'Многопоточный':
+                self.mode = 'threads'
+            else:
+                self.mode = 'async'
+            self.step = 1
+            self.monitoring.run_program = True
+            self.ui.b_start.setEnabled(False)
+            self.ui.b_modify.setEnabled(False)
+            self.ui.b_stop.setEnabled(True)
+            self.monitoring.start()
+            self.update_status(f'Программа запущена. Продолжительность цикла до'
+                               f' 15 секунд. Шаг №  {self.step}')
 
-        self.ui.cb_mode_work.setDisabled(True)
+            self.ui.cb_mode_work.setDisabled(True)
 
     def update_status(self, text):
         self.ui.statusbar.showMessage(text)
@@ -155,6 +155,25 @@ class MyWindow(QtWidgets.QMainWindow):
         self.edit_and_view_window.init()
         self.edit_and_view_window.setWindowState(Qt.WindowFullScreen)
         self.edit_and_view_window.exec()
+
+    def __can_start(self):
+        hosts = self.manager.read_hosts_status()
+        if len(hosts) == 0:
+            QMessageBox.information(self,
+                                    "Программа не может быть запущена!!!",
+                                    "Необходимо выбрать хотя бы 1 хост")
+            return False
+        music_files = get_music_file('program_voice/voice_files/')
+        for host in hosts:
+            if host.alarm not in music_files:
+                QMessageBox.information(self,
+                                    "Программа не может быть запущена!!!",
+                                    f"Отсутствует музыкальный файл \n"
+                                    f"{host.alarm} y хоста {host.name} в"
+                                    f"папке с музыкой. Измените данные"
+                                    )
+                return False
+        return True
 
 
 if __name__ == "__main__":

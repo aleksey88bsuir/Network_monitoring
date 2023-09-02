@@ -207,5 +207,5 @@ if __name__ == "__main__":
     manager.dict_of_hosts_we_work_with()
     data1 = manager.read_hosts_status()
     manager.clear_list_of_hosts()
-    manager.add_all_hosts()
+    # manager.add_all_hosts()
     data2 = manager.read_hosts_status()

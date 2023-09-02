@@ -33,8 +33,11 @@ class AddAndEditWindow(QtWidgets.QDialog):
         if self.edit_host:
             self.ui.ip_add_edit.setText(self.edit_host.ip_add)
             self.ui.name_edit.setText(self.edit_host.name)
-            if index := self.music_files.index(self.edit_host.music):
+            try:
+                index = self.music_files.index(self.edit_host.music)
                 self.ui.alarm_edit.setCurrentIndex(index)
+            except ValueError:
+                self.ui.alarm_edit.setCurrentIndex(0)
             self.ui.descr_edit.setText(self.edit_host.descr)
             self.ui.b_ok.clicked.connect(self.update_host)
 

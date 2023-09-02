@@ -9,8 +9,7 @@ class PingObject:
         self.average_delay = None
         self.status_host = 'unknown'
         self.color = 'gray'
-        self.host_alarm = music
-        if self.host_alarm == '':
+        if self.alarm == '':
             self.engine_sound = "engine_sound"
         else:
             self.engine_sound = None
