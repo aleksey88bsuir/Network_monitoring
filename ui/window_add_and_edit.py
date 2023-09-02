@@ -87,8 +87,9 @@ class AddAndEditWindow(QtWidgets.QDialog):
     def __validate_ip_add(self, ip_add: str) -> bool:
         self.ui.l_warning_ip_add.clear()
         self.ui.l_warning_ip_add.setStyleSheet("color: red")
-        if ip_add == '':
+        if not ip_add:
             self.ui.l_warning_ip_add.setText('Введите ip адрес')
+            return False
         if not self.ui.checkBox.isChecked():
             import re
             regex = (r'^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.)'
@@ -107,8 +108,9 @@ class AddAndEditWindow(QtWidgets.QDialog):
     def __validate_name(self, host_name: str) -> bool:
         self.ui.l_warning_name.clear()
         self.ui.l_warning_name.setStyleSheet("color: red")
-        if host_name == '':
+        if not host_name:
             self.ui.l_warning_name.setText('Введите имя')
+            return False
         if host_name in self.hosts_name:
             self.ui.l_warning_name.setText('Хост с таким именем '
                                              'уже существует')

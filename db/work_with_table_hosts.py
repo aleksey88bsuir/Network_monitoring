@@ -1,5 +1,6 @@
-from db.model import Hosts, Session
+from db.model import Hosts, Session, LostPackets, InfoAboutStatus
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy import between, cast
 from loger import app_loger
 
 
@@ -74,3 +75,41 @@ class WorkWithHosts:
                 app_loger.info(f'Успешно удалена запись из БД '
                                f'{host_for_del.name}, '
                                f'{host_for_del.ip_add}')
+
+
+class WorkWithUnionTables:
+
+    @staticmethod
+    def read_info_about_status(host_id: int) -> list:
+        with Session() as session:
+            info = session.query(
+                Hosts.name,
+                Hosts.ip_add,
+                InfoAboutStatus.status,
+                InfoAboutStatus.time_event
+            ).join(
+                InfoAboutStatus,
+                Hosts.host_id == InfoAboutStatus.host_id
+            ).filter(
+                Hosts.host_id == host_id
+            ).all()
+        if info:
+            return info
+
+    @staticmethod
+    def read_info_about_status_with_time(host_id, st_time, fin_time):
+        with Session() as session:
+            info = session.query(
+                Hosts.name,
+                Hosts.ip_add,
+                InfoAboutStatus.status,
+                InfoAboutStatus.time_event
+            ).join(
+                InfoAboutStatus,
+                Hosts.host_id == InfoAboutStatus.host_id
+            ).filter(
+                Hosts.host_id == host_id,
+                InfoAboutStatus.time_event.between(st_time, fin_time)
+            ).order_by(InfoAboutStatus.time_event).all()
+        if info:
+            return info

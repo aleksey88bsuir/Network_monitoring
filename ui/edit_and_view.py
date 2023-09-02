@@ -7,6 +7,8 @@ from ui.edit_and_view_window import Ui_Dialog
 from search_host import HostsIter
 from list_of_hosts_we_work_with import write_current_hosts
 from window_add_and_edit import AddAndEditWindow
+from func_for_gui import (show_host_status_history,
+                          show_host_status_history_with_time)
 
 
 class EditAndViewWindow(QtWidgets.QDialog):
@@ -157,16 +159,21 @@ class EditAndViewWindow(QtWidgets.QDialog):
         self.ui.b_up.setDisabled(True)
 
     def move_up(self):
+        item = None
         try:
-            item = self.selected_item.text()
-            self.host_id = self.get_id_host(item)
-            if self.host_id:
-                self.list_with_id_hosts.remove(self.host_id)
-                self.working_hosts.remove(self.selected_item.text())
-                self.update_date_in_tables_on_first_window()
-                self.update_buttons_on_first_window()
-                self.ui.b_save_changes.setDisabled(False)
-                self.ui.search_line.clear()
+            try:
+                item = self.selected_item.text()
+            except AttributeError:
+                print('Так нельзя делать')
+            if item:
+                self.host_id = self.get_id_host(item)
+                if self.host_id:
+                    self.list_with_id_hosts.remove(self.host_id)
+                    self.working_hosts.remove(self.selected_item.text())
+                    self.update_date_in_tables_on_first_window()
+                    self.update_buttons_on_first_window()
+                    self.ui.b_save_changes.setDisabled(False)
+                    self.ui.search_line.clear()
         except RuntimeError:
             print('error')
 
@@ -216,12 +223,23 @@ class EditAndViewWindow(QtWidgets.QDialog):
             self.ui.list_with_access_hosts2.addItem(item_)
 
     def handle_selection_access_list2(self):
+        self.id_host_in_access_list2 = self.get_id_host(
+            self.ui.list_with_access_hosts2.currentItem().text())
         self.ui.b_read_history_connection.setDisabled(False)
         self.ui.b_read_history_lp.setDisabled(False)
         self.ui.b_view_packet_delay_graph.setDisabled(False)
 
     def read_history_connection(self):
-        pass
+        if self.ui.time_filter.isChecked():
+            start_time = self.ui.start_date_and_time.dateTime().toPyDateTime()
+            end_time = self.ui.finish_date_and_time.dateTime().toPyDateTime()
+            show_host_status_history_with_time(
+                self.id_host_in_access_list2,
+                start_time,
+                end_time
+            )
+        else:
+            show_host_status_history(self.id_host_in_access_list2)
 
     def read_history_lp(self):
         pass
@@ -235,7 +253,7 @@ class EditAndViewWindow(QtWidgets.QDialog):
         self.ui.t_all_hosts.setRowCount(len(self.current_hosts))
 
         self.ui.t_all_hosts.setHorizontalHeaderLabels(
-            ['id','Имя хоста', 'IP-адрес хоста', 'Аварийный сигнал', 'Описание'])
+            ['id', 'Имя хоста', 'IP-адрес хоста', 'Аварийный сигнал', 'Описание'])
         for i, string in enumerate(self.current_hosts):
             self.ui.t_all_hosts.setItem(i, 0,
                                         self.set_item_in_table(string,

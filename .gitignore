@@ -7,3 +7,4 @@ temp*
 db/current_hosts.txt
 ui/sortable_table.py
 ui/edit_and_view_window2.ui
+report.txt
