@@ -8,7 +8,9 @@ from search_host import HostsIter
 from list_of_hosts_we_work_with import write_current_hosts
 from window_add_and_edit import AddAndEditWindow
 from func_for_gui import (show_host_status_history,
-                          show_host_status_history_with_time)
+                          show_host_status_history_with_time,
+                          show_host_lp_history,
+                          show_host_lp_history_with_time)
 
 
 class EditAndViewWindow(QtWidgets.QDialog):
@@ -160,22 +162,20 @@ class EditAndViewWindow(QtWidgets.QDialog):
 
     def move_up(self):
         item = None
+
         try:
-            try:
-                item = self.selected_item.text()
-            except AttributeError:
-                print('Так нельзя делать')
-            if item:
-                self.host_id = self.get_id_host(item)
-                if self.host_id:
-                    self.list_with_id_hosts.remove(self.host_id)
-                    self.working_hosts.remove(self.selected_item.text())
-                    self.update_date_in_tables_on_first_window()
-                    self.update_buttons_on_first_window()
-                    self.ui.b_save_changes.setDisabled(False)
-                    self.ui.search_line.clear()
-        except RuntimeError:
-            print('error')
+            item = self.selected_item.text()
+        except AttributeError:
+            pass
+        if item:
+            self.host_id = self.get_id_host(item)
+            if self.host_id:
+                self.list_with_id_hosts.remove(self.host_id)
+                self.working_hosts.remove(self.selected_item.text())
+                self.update_date_in_tables_on_first_window()
+                self.update_buttons_on_first_window()
+                self.ui.b_save_changes.setDisabled(False)
+                self.ui.search_line.clear()
 
     def move_down(self):
         try:
@@ -242,7 +242,16 @@ class EditAndViewWindow(QtWidgets.QDialog):
             show_host_status_history(self.id_host_in_access_list2)
 
     def read_history_lp(self):
-        pass
+        if self.ui.time_filter.isChecked():
+            start_time = self.ui.start_date_and_time.dateTime().toPyDateTime()
+            end_time = self.ui.finish_date_and_time.dateTime().toPyDateTime()
+            show_host_lp_history_with_time(
+                self.id_host_in_access_list2,
+                start_time,
+                end_time
+            )
+        else:
+            show_host_lp_history(self.id_host_in_access_list2)
 
     def view_packet_delay_graph(self):
         pass

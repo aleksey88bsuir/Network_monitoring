@@ -113,3 +113,38 @@ class WorkWithUnionTables:
             ).order_by(InfoAboutStatus.time_event).all()
         if info:
             return info
+
+    @staticmethod
+    def read_info_about_lp(host_id: int) -> list:
+        with Session() as session:
+            info = session.query(
+                Hosts.name,
+                Hosts.ip_add,
+                LostPackets.number_of_packages,
+                LostPackets.time_event
+            ).join(
+                LostPackets,
+                Hosts.host_id == LostPackets.host_id
+            ).filter(
+                Hosts.host_id == host_id
+            ).all()
+        if info:
+            return info
+
+    @staticmethod
+    def read_info_about_lp_with_time(host_id, st_time, fin_time):
+        with Session() as session:
+            info = session.query(
+                Hosts.name,
+                Hosts.ip_add,
+                LostPackets.number_of_packages,
+                LostPackets.time_event
+            ).join(
+                LostPackets,
+                Hosts.host_id == LostPackets.host_id
+            ).filter(
+                Hosts.host_id == host_id,
+                LostPackets.time_event.between(st_time, fin_time)
+            ).order_by(LostPackets.time_event).all()
+        if info:
+            return info
