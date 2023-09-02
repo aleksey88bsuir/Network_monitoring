@@ -157,14 +157,18 @@ class EditAndViewWindow(QtWidgets.QDialog):
         self.ui.b_up.setDisabled(True)
 
     def move_up(self):
-        self.host_id = self.get_id_host(self.selected_item.text())
-        if self.host_id:
-            self.list_with_id_hosts.remove(self.host_id)
-            self.working_hosts.remove(self.selected_item.text())
-            self.update_date_in_tables_on_first_window()
-            self.update_buttons_on_first_window()
-            self.ui.b_save_changes.setDisabled(False)
-            self.ui.search_line.clear()
+        try:
+            item = self.selected_item.text()
+            self.host_id = self.get_id_host(item)
+            if self.host_id:
+                self.list_with_id_hosts.remove(self.host_id)
+                self.working_hosts.remove(self.selected_item.text())
+                self.update_date_in_tables_on_first_window()
+                self.update_buttons_on_first_window()
+                self.ui.b_save_changes.setDisabled(False)
+                self.ui.search_line.clear()
+        except RuntimeError:
+            print('error')
 
     def move_down(self):
         try:
@@ -305,7 +309,14 @@ class EditAndViewWindow(QtWidgets.QDialog):
         if str(self.id_host_in_table) in self.list_with_id_hosts:
             self.list_with_id_hosts.remove(str(self.id_host_in_table))
             self.save_changes()
+        host = self.main_window.manager.wwh.read_info_about_host(
+            self.id_host_in_table)
         self.main_window.manager.wwh.delete_host(self.id_host_in_table)
+        try:
+            self.window_add_and_edit.hosts_ip_add.remove(host.ip_add)
+            self.window_add_and_edit.hosts_name.remove(host.name)
+        except Exception as e:
+            print(e)
         self.clear_setting_data()
         self.set_data()
         self.all_update()
