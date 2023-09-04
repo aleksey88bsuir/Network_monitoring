@@ -7,7 +7,7 @@ class HostsIter:
         return self.__data
 
     @staticmethod
-    def __validate_adding_data(some_data):
+    def __validate_adding_data(some_data: str) -> None:
         if not isinstance(some_data, str):
             raise ValueError('Должна передаваться строка')
 
@@ -27,5 +27,5 @@ class HostsIter:
             raise StopIteration()
         return result
 
-    def clear(self):
+    def clear(self) -> None:
         self.__data = list()

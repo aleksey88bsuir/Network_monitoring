@@ -2,8 +2,10 @@ import asyncio
 import platform
 import subprocess
 from datetime import datetime
+from loger import app_loger, log_exceptions
 
 
+@log_exceptions(logger=app_loger)
 async def ping_host(host_ip_add):
     param = '-n' if platform.system().lower() == 'windows' else '-c'
     process = await asyncio.create_subprocess_exec('ping', param,
@@ -15,6 +17,7 @@ async def ping_host(host_ip_add):
     return stdout.decode(), stderr.decode()
 
 
+@log_exceptions(logger=app_loger)
 async def monitor(hosts):
     tasks = [ping_host(host[1]) for host in hosts]
     result = await asyncio.gather(*tasks)

@@ -1,11 +1,12 @@
 from db.model import InfoAboutStatus, Session
-from loger import app_loger
 from datetime import datetime
+from loger import app_loger, log_exceptions
 
 
 class WorkWithHostStatus:
 
     @staticmethod
+    @log_exceptions(logger=app_loger)
     def create(host_pk: int, status: str) -> None:
         with Session() as session:
             try:
@@ -21,6 +22,7 @@ class WorkWithHostStatus:
                                    f'{host_pk}')
 
     @staticmethod
+    @log_exceptions(logger=app_loger)
     def read_all_data() -> list:
         with Session() as session:
             info_hosts = session.query(InfoAboutStatus).all()
@@ -35,6 +37,7 @@ class WorkWithHostStatus:
             return status_info
 
     @staticmethod
+    @log_exceptions(logger=app_loger)
     def read_info_about_host(host_id: int) -> InfoAboutStatus:
         with Session() as session:
             info_host = session.query(InfoAboutStatus).\

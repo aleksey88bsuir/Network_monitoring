@@ -1,12 +1,12 @@
 from db.model import Hosts, Session, LostPackets, InfoAboutStatus
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy import between, cast
-from loger import app_loger
+from loger import app_loger, log_exceptions
 
 
 class WorkWithHosts:
 
     @staticmethod
+    @log_exceptions(logger=app_loger)
     def create(host_dict: dict) -> None:
         with Session() as session:
             try:
@@ -26,6 +26,7 @@ class WorkWithHosts:
                                 f'{host_dict.get("ip_add")}')
 
     @staticmethod
+    @log_exceptions(logger=app_loger)
     def read_all_data() -> list:
         with Session() as session:
             hosts = session.query(Hosts).all()
@@ -42,6 +43,7 @@ class WorkWithHosts:
             return hosts_list
 
     @staticmethod
+    @log_exceptions(logger=app_loger)
     def read_info_about_host(host_id: int) -> Hosts:
         with Session() as session:
             host = session.query(Hosts).\
@@ -50,6 +52,7 @@ class WorkWithHosts:
                 return host
 
     @staticmethod
+    @log_exceptions(logger=app_loger)
     def update_host(host: Hosts) -> None:
         with Session() as session:
             session.query(Hosts).\
@@ -60,11 +63,11 @@ class WorkWithHosts:
                          descr=host.descr,
                          ))
             session.commit()
-            app_loger.info(f'Успешно обновлена запись в БД '
-               f'{host.name}, '
-               f'{host.ip_add}')
+            app_loger.info(f'Успешно обновлена запись в БД {host.name} '
+                           f'{host.ip_add}')
 
     @staticmethod
+    @log_exceptions(logger=app_loger)
     def delete_host(host_id: Hosts) -> None:
         with Session() as session:
             host_for_del = session.query(Hosts).\
@@ -80,6 +83,7 @@ class WorkWithHosts:
 class WorkWithUnionTables:
 
     @staticmethod
+    @log_exceptions(logger=app_loger)
     def read_info_about_status(host_id: int) -> list:
         with Session() as session:
             info = session.query(
@@ -97,6 +101,7 @@ class WorkWithUnionTables:
             return info
 
     @staticmethod
+    @log_exceptions(logger=app_loger)
     def read_info_about_status_with_time(host_id, st_time, fin_time):
         with Session() as session:
             info = session.query(
@@ -115,6 +120,7 @@ class WorkWithUnionTables:
             return info
 
     @staticmethod
+    @log_exceptions(logger=app_loger)
     def read_info_about_lp(host_id: int) -> list:
         with Session() as session:
             info = session.query(
@@ -132,6 +138,7 @@ class WorkWithUnionTables:
             return info
 
     @staticmethod
+    @log_exceptions(logger=app_loger)
     def read_info_about_lp_with_time(host_id, st_time, fin_time):
         with Session() as session:
             info = session.query(

@@ -1,8 +1,10 @@
 import re
 from async_net_monitoring import monitor
 import asyncio
+from loger import log_exceptions, app_loger
 
 
+@log_exceptions(logger=app_loger)
 def respond_query_data_and_transform(hosts):
     ping_results_string = asyncio.run(monitor(hosts))
     string_list_hosts_info = ping_results_string.split('end_res')
@@ -35,6 +37,7 @@ def respond_query_data_and_transform(hosts):
     return host_data_list
 
 
+@log_exceptions(logger=app_loger)
 def allocation_to_lists_async(hosts):
     host_data_list = respond_query_data_and_transform(hosts)
     online_lists = []

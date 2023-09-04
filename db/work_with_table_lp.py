@@ -1,11 +1,12 @@
 from db.model import LostPackets, Session
-from loger import app_loger
+from loger import app_loger, log_exceptions
 from datetime import datetime
 
 
 class WorkWithLostPackets:
 
     @staticmethod
+    @log_exceptions(logger=app_loger)
     def create(host_pk: int, amount_lost_packets: int) -> None:
         with Session() as session:
             try:
@@ -22,6 +23,7 @@ class WorkWithLostPackets:
                                    f'{type(amount_lost_packets)}')
 
     @staticmethod
+    @log_exceptions(logger=app_loger)
     def read_all_data():
         with Session() as session:
             lp = session.query(LostPackets).all()
@@ -36,6 +38,7 @@ class WorkWithLostPackets:
             return lp_list
 
     @staticmethod
+    @log_exceptions(logger=app_loger)
     def read_info_about_host(host_id: int) -> LostPackets:
         with Session() as session:
             lp = session.query(LostPackets).\

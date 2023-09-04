@@ -25,7 +25,7 @@ def handle_info_about_host(host_id: str, host_ip: str,
     """
     Обрабатывает информацию, полученную от check_host
     :param host_ip: ip адрес хоста
-    :param host_name: доменное имя хоста (узла связи)
+    :param host_id: id хоста (узла связи)
     :param queue: Объект класса Queue. Необходим для работы в многопоточном
     режиме
     :return: возвращает результат обработки информации, полученной от хоста
