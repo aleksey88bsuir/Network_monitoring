@@ -3,3 +3,5 @@ pip install SqlAlchemy
 pip install pyttsx3
 pip install playsound
 pip install PyQt5
+pip install matplotlib
+

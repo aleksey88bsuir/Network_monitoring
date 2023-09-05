@@ -189,8 +189,7 @@ class MyWindow(QtWidgets.QMainWindow):
             self.edit_and_view_window.setStyleSheet(self.style_sheet)
             self.edit_and_view_window.clear_setting_data()
             self.edit_and_view_window.init()
-            self.edit_and_view_window.setWindowState(Qt.WindowFullScreen)
-            self.edit_and_view_window.exec()
+            self.edit_and_view_window.show()
         except Exception as e:
             self.log.log_error(e)
 

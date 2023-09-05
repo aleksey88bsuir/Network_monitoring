@@ -3,7 +3,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QBrush, QColor
 from PyQt5.QtWidgets import QListWidgetItem, QTableWidgetItem, QHeaderView, \
     QSizePolicy
-from ui.edit_and_view_window import Ui_Dialog
+from ui.edit_and_view_window import Ui_MainWindow
 from search_host import HostsIter
 from list_of_hosts_we_work_with import write_current_hosts
 from window_add_and_edit import AddAndEditWindow
@@ -13,14 +13,15 @@ from func_for_gui import (show_host_status_history,
                           show_host_lp_history_with_time)
 from loger import LoggerWrapper, log_exceptions, app_loger
 from ping_object import PingObject
+from graph import GraphWindow
 
 
-class EditAndViewWindow(QtWidgets.QDialog):
+class EditAndViewWindow(QtWidgets.QMainWindow):
     def __init__(self, main_window: QtWidgets) -> None:
         super().__init__()
         self.log = LoggerWrapper()
         self.main_window = main_window
-        self.ui = Ui_Dialog()
+        self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
         self.ui.retranslateUi(self)
         self.access_hosts = None
@@ -322,7 +323,11 @@ class EditAndViewWindow(QtWidgets.QDialog):
 
     def view_packet_delay_graph(self):
         try:
-            pass
+            self.graph_win = GraphWindow()
+            self.graph_win.setWindowModality(Qt.ApplicationModal)
+            self.graph_win.setWindowTitle('График')
+            self.graph_win.setStyleSheet(self.main_window.style_sheet)
+            self.graph_win.show()
         except Exception as e:
             self.log.log_error(e)
 
