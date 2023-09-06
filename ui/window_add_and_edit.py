@@ -108,6 +108,8 @@ class AddAndEditWindow(QtWidgets.QDialog):
             self.ui.l_warning_ip_add.setStyleSheet("color: red")
             if not ip_add:
                 self.ui.l_warning_ip_add.setText('Введите ip адрес')
+                self.loger.log_info(
+                        f'Попытка записи в таблицу хоста с пустым ip-адресом')
                 return False
             if not self.ui.checkBox.isChecked():
                 import re
@@ -115,11 +117,17 @@ class AddAndEditWindow(QtWidgets.QDialog):
                          r'{3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')
                 if not re.match(regex, ip_add):
                     self.ui.l_warning_ip_add.setText('Проверьте IP aдрес')
+                    self.loger.log_info(
+                        f'Неверно введен ip-адрес при добавлении '
+                        f'хоста ({ip_add})')
                     return False
 
                 if ip_add in self.hosts_ip_add:
                     self.ui.l_warning_ip_add.setText('Хост с таким ip '
                                                      'уже существует')
+                    self.loger.log_info(
+                        f'Попытка записи в таблицу хоста с ip-адресом'
+                        f'который уже присутствует в таблице ({ip_add})')
                     return False
             return True
         except Exception as e:
@@ -131,10 +139,15 @@ class AddAndEditWindow(QtWidgets.QDialog):
             self.ui.l_warning_name.setStyleSheet("color: red")
             if not host_name:
                 self.ui.l_warning_name.setText('Введите имя')
+                self.loger.log_info(
+                        f'Попытка записи в таблицу хоста с пустым именем')
                 return False
             if host_name in self.hosts_name:
                 self.ui.l_warning_name.setText(
                     'Хост с таким именем уже существует')
+                self.loger.log_info(
+                        f'Попытка записи в таблицу хоста с именем'
+                        f'которое уже присутствует в таблице ({host_name})')
                 return False
             return True
         except Exception as e:
@@ -144,6 +157,8 @@ class AddAndEditWindow(QtWidgets.QDialog):
         try:
             self.default_setting()
             self.close()
+            self.loger.log_info(
+                'окно "Окно редактирования (добавления) узла" закрыто')
         except Exception as e:
             self.loger.log_error(e)
 

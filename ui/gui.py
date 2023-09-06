@@ -139,7 +139,8 @@ class MyWindow(QtWidgets.QMainWindow):
                                    f'Продолжительность цикла '
                                    f'до 15 секунд. Шаг №  {self.step}')
                 self.ui.cb_mode_work.setDisabled(True)
-                self.log.log_info('Старт мониторинга хостов')
+                self.log.log_info(
+                    f'Старт мониторинга хостов в режиме {self.mode}')
         except Exception as e:
             self.log.log_error(e)
 
@@ -167,6 +168,8 @@ class MyWindow(QtWidgets.QMainWindow):
             stream = file.readAll()
             self.style_sheet = str(stream, encoding='utf-8')
             self.setStyleSheet(self.style_sheet)
+            self.log.log_info(
+                f'Скин программы изменен на {file}')
         except Exception as e:
             self.log.log_error(e)
 
@@ -204,7 +207,6 @@ class MyWindow(QtWidgets.QMainWindow):
         except Exception as e:
             self.log.log_error(e)
 
-
     def __can_start(self) -> bool:
         try:
             hosts = self.manager.read_hosts_status()
@@ -213,6 +215,8 @@ class MyWindow(QtWidgets.QMainWindow):
                     self,
                     "Программа не может быть запущена!!!",
                     "Необходимо выбрать хотя бы 1 хост")
+                self.log.log_info(
+                    'Попытка запуска мониторинга с пустой таблицей')
                 return False
             music_files = get_music_file('program_voice/voice_files/')
             for host in hosts:
@@ -224,6 +228,10 @@ class MyWindow(QtWidgets.QMainWindow):
                         f"{host.alarm} y хоста {host.name} в"
                         f"папке с музыкой. Измените данные"
                         )
+                    self.log.log_info(
+                        f'Попытка запуска программы с отсутствующим '
+                        f'музыкальным файлом {host.alarm} y хоста {host.name}'
+                        f'в папке с музыкой')
                     return False
             return True
         except Exception as e:

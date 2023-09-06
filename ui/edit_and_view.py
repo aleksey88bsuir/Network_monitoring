@@ -39,6 +39,7 @@ class EditAndViewWindow(QtWidgets.QMainWindow):
         self.selected_item = None
         self.host_id = None
         self.id_host_in_access_list2 = None
+        self.graph_win = None
         self.list_with_id_hosts = []
         self.hosts_iter_first_window = HostsIter()
         self.hosts_iter_second_window = HostsIter()
@@ -255,6 +256,9 @@ class EditAndViewWindow(QtWidgets.QMainWindow):
             self.ui.b_save_changes.setDisabled(True)
             self.main_window.manager.dict_of_hosts_we_work_with()
             self.main_window.refresh_table()
+            self.log.log_info(f'Изменены узлы (хосты) предназначенные для'
+                              f'мониторинга в сети. Узлы с id '
+                              f'{self.list_with_id_hosts}')
         except Exception as e:
             self.log.log_error(e)
 
@@ -312,8 +316,13 @@ class EditAndViewWindow(QtWidgets.QMainWindow):
                     start_time,
                     end_time
                 )
+                self.log.log_info(f'Запрошена история статуса в сети'
+                                  f'хоста с id {self.id_host_in_access_list2}'
+                                  f'с {start_time} по {end_time}')
             else:
                 show_host_status_history(self.id_host_in_access_list2)
+                self.log.log_info(f'Запрошена история статуса в сети'
+                                  f'хоста с id {self.id_host_in_access_list2}')
         except Exception as e:
             self.log.log_error(e)
 
@@ -329,8 +338,14 @@ class EditAndViewWindow(QtWidgets.QMainWindow):
                     start_time,
                     end_time
                 )
+                self.log.log_info(f'Запрошена история потеряных пакетов'
+                                  f'хоста с id {self.id_host_in_access_list2}'
+                                  f'с {start_time} по {end_time}')
             else:
                 show_host_lp_history(self.id_host_in_access_list2)
+                self.log.log_info(f'Запрошена история потеряных пакетов'
+                                  f'хоста с id {self.id_host_in_access_list2}')
+
         except Exception as e:
             self.log.log_error(e)
 
@@ -348,6 +363,7 @@ class EditAndViewWindow(QtWidgets.QMainWindow):
                 time = [y[1] for y in delay_and_time_host]
                 self.graph_win.plot_data(time, delay)
                 self.graph_win.show()
+                self.log.log_info(f'Открыт график задержки сигнала {host}')
             else:
                 title = "ВНИМАНИЕ"
                 text = (f"График доступен только для узлов, которые были "
@@ -357,6 +373,8 @@ class EditAndViewWindow(QtWidgets.QMainWindow):
                             f" так как автор программы не видит в этом"
                             f" необходимости.")
                 self.main_window.info.information(self, title, text)
+                self.log.log_info(f'Сообщение о невозможности отображения'
+                                  f'графика сигнала {host}')
         except Exception as e:
             self.log.log_error(e)
 
@@ -452,6 +470,7 @@ class EditAndViewWindow(QtWidgets.QMainWindow):
                 self.main_window.style_sheet)
             self.window_add_and_edit.init_add_host()
             self.window_add_and_edit.exec()
+            self.log.log_info('Открыто окно "Окно добавления узла"')
         except Exception as e:
             self.log.log_error(e)
 
@@ -479,5 +498,6 @@ class EditAndViewWindow(QtWidgets.QMainWindow):
                 self.main_window.style_sheet)
             self.window_add_and_edit.init_edit_host(self.id_host_in_table)
             self.window_add_and_edit.exec()
+            self.log.log_info('Открыто окно "Окно редактирования узла"')
         except Exception as e:
             self.log.log_error(e)
