@@ -17,6 +17,13 @@ from graph import GraphWindow
 
 
 class EditAndViewWindow(QtWidgets.QMainWindow):
+    __instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if cls.__instance is None:
+            cls.__instance = super().__new__(cls)
+        return cls.__instance
+
     def __init__(self, main_window: QtWidgets) -> None:
         super().__init__()
         self.log = LoggerWrapper()
@@ -38,7 +45,7 @@ class EditAndViewWindow(QtWidgets.QMainWindow):
         self.hosts_iter_third_window = HostsIter()
         self.window_add_and_edit = AddAndEditWindow(self)
 
-    def init(self) -> None:
+    def default_setting(self) -> None:
         try:
             self.start_interface()
             self.set_data()
@@ -141,6 +148,12 @@ class EditAndViewWindow(QtWidgets.QMainWindow):
         ip_add_pattern = r'(\d+) --'
         host_id_ = re.findall(ip_add_pattern, info_string)[0]
         return host_id_
+
+    def closeEvent(self, event):
+        self.log.log_info(
+            'Закрыто окно "редактирования (просмотра) информации"')
+        del self.main_window.edit_and_view_window
+        event.accept()
 
 # _________first_window____________________________
 
@@ -323,11 +336,27 @@ class EditAndViewWindow(QtWidgets.QMainWindow):
 
     def view_packet_delay_graph(self):
         try:
-            self.graph_win = GraphWindow()
-            self.graph_win.setWindowModality(Qt.ApplicationModal)
-            self.graph_win.setWindowTitle('График')
-            self.graph_win.setStyleSheet(self.main_window.style_sheet)
-            self.graph_win.show()
+            host = self.main_window.manager.list_of_hosts.get(
+                int(self.id_host_in_access_list2))
+            if host and (delay_and_time_host := host.get_delay_and_time()):
+                self.graph_win = GraphWindow()
+                self.graph_win.setWindowModality(Qt.ApplicationModal)
+                self.graph_win.setWindowTitle(
+                    f'График задержки сигнала хоста "{host.name}"')
+                self.graph_win.setStyleSheet(self.main_window.style_sheet)
+                delay = [x[0] for x in delay_and_time_host]
+                time = [y[1] for y in delay_and_time_host]
+                self.graph_win.plot_data(time, delay)
+                self.graph_win.show()
+            else:
+                title = "ВНИМАНИЕ"
+                text = (f"График доступен только для узлов, которые были "
+                            f"online в последней сесии работы программы. "
+                            f"Данные о средней задержке хоста нигде не "
+                            f"сохраняются (можно сохранить только сам график),"
+                            f" так как автор программы не видит в этом"
+                            f" необходимости.")
+                self.main_window.info.information(self, title, text)
         except Exception as e:
             self.log.log_error(e)
 

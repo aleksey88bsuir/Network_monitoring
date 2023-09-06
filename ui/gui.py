@@ -32,6 +32,7 @@ class MyWindow(QtWidgets.QMainWindow):
         self.start_program = None
         self.mode = None
         self.write_successful_message()
+        self.info = QMessageBox()
 
     def write_successful_message(self) -> None:
         self.log.log_info('Программа успешно запущена')
@@ -183,28 +184,40 @@ class MyWindow(QtWidgets.QMainWindow):
 
     def open_modify_window(self) -> None:
         try:
+            if self.edit_and_view_window is not None:
+                self.create_edit_and_view_window()
+        except AttributeError:
+            self.edit_and_view_window = EditAndViewWindow(self)
+            self.create_edit_and_view_window()
+
+    def create_edit_and_view_window(self):
+        try:
             self.edit_and_view_window.setWindowModality(Qt.ApplicationModal)
-            self.edit_and_view_window.setWindowTitle('Окно редактирования '
-                                                     '(просмотра) информации')
+            self.edit_and_view_window.setWindowTitle(
+                'Окно редактирования (просмотра) информации')
             self.edit_and_view_window.setStyleSheet(self.style_sheet)
             self.edit_and_view_window.clear_setting_data()
-            self.edit_and_view_window.init()
+            self.edit_and_view_window.default_setting()
             self.edit_and_view_window.show()
+            self.log.log_info(
+                'Открыто окно "Окно редактирования (просмотра) информации"')
         except Exception as e:
             self.log.log_error(e)
+
 
     def __can_start(self) -> bool:
         try:
             hosts = self.manager.read_hosts_status()
             if len(hosts) == 0:
-                QMessageBox.information(self,
-                                        "Программа не может быть запущена!!!",
-                                        "Необходимо выбрать хотя бы 1 хост")
+                self.info.information(
+                    self,
+                    "Программа не может быть запущена!!!",
+                    "Необходимо выбрать хотя бы 1 хост")
                 return False
             music_files = get_music_file('program_voice/voice_files/')
             for host in hosts:
                 if host.alarm not in music_files:
-                    QMessageBox.information(
+                    self.info.information(
                         self,
                         "Программа не может быть запущена!!!",
                         f"Отсутствует музыкальный файл \n"
@@ -217,11 +230,11 @@ class MyWindow(QtWidgets.QMainWindow):
             self.log.log_error(e)
 
     def closeEvent(self, event):
-        close = QMessageBox.question(
+        close = self.info.question(
             self, "Выход из программы",
             "Вы уверены, что хотите закрыть программу сетевого мониторинга?",
-            QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
-        if close == QMessageBox.Yes:
+            self.info.Yes | self.info.No, self.info.No)
+        if close == self.info.Yes:
             self.log.log_info('Программа закрыта пользователем')
             event.accept()
         else:

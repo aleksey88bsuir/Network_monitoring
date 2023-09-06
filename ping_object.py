@@ -1,3 +1,6 @@
+import datetime
+
+
 class PingObject:
 
     def __init__(self, host_id: int, ip_add: str,
@@ -10,10 +13,8 @@ class PingObject:
         self.average_delay = None
         self.status_host = 'unknown'
         self.color = 'gray'
-        if self.alarm == '':
-            self.engine_sound = "engine_sound"
-        else:
-            self.engine_sound = None
+        self.engine_sound = "engine_sound" if self.alarm == '' else None
+        self.delay_and_time_list = list()
 
     def change_status_host_on_online(self) -> None:
         self.status_host = 'online'
@@ -29,6 +30,14 @@ class PingObject:
 
     def setup_average_delay(self, delay: float) -> None:
         self.average_delay = delay
+
+    def add_delay_and_time(
+            self,
+            delay_and_time: tuple[float,  datetime]) -> None:
+        self.delay_and_time_list.append(delay_and_time)
+
+    def get_delay_and_time(self) -> tuple:
+        return tuple(self.delay_and_time_list)
 
     def __str__(self) -> str:
         return f'{self.id} -- {self.name} -- {self.ip_add} -- {self.descr}'

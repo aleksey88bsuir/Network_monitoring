@@ -9,7 +9,7 @@ app_loger.setLevel(logging.INFO)
 # настройка обработчика и форматировщика для app_loger
 handler_for_func = logging.FileHandler(f"app.log", mode='a')
 formatter_for_func = logging.Formatter(
-    fmt='%(asctime)s %(levelname)s %(message)s',
+    fmt='[%(asctime)s] [%(levelname)s] => %(message)s',
     datefmt='%d.%m.%Y %H:%M:%S'
 )
 
@@ -47,16 +47,16 @@ class LoggerWrapper:
         if len(self.logger.handlers) > 0:
             return
         info_handler = logging.FileHandler('app.log', mode='a')
-        error_handler = logging.FileHandler('error.log', mode='a')
+        # error_handler = logging.FileHandler('error.log', mode='a')
         formatter_ = logging.Formatter(
-            fmt='%(asctime)s %(levelname)s %(message)s',
+            fmt='[%(asctime)s] [%(levelname)s] => %(message)s',
             datefmt='%d.%m.%Y %H:%M:%S')
         info_handler.setFormatter(formatter_)
-        error_handler.setFormatter(formatter_)
+        # error_handler.setFormatter(formatter_)
         info_handler.setLevel(logging.INFO)
-        error_handler.setLevel(logging.ERROR)
+        # error_handler.setLevel(logging.ERROR)
         self.logger.addHandler(info_handler)
-        self.logger.addHandler(error_handler)
+        # self.logger.addHandler(error_handler)
 
     def log_info(self, message):
         self.logger.info(message)

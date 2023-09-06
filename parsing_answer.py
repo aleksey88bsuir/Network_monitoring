@@ -24,8 +24,8 @@ def respond_query_data_and_transform(hosts):
         transmitted_packets = int(transmitted_packets[0]) if (
             transmitted_packets) else 0
         received_packets = int(received_packets[0]) if received_packets else 0
-        avg_delay = round(float(average_delay_[0][1]), 4) if average_delay_ \
-            else None
+        avg_delay = round(float(average_delay_[0][1])/1000, 4)\
+            if average_delay_ else None
         dict_host_info = {
             'id': int(id_),
             'ip': ip_add,

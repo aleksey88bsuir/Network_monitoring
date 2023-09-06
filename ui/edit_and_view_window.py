@@ -67,6 +67,11 @@ class Ui_MainWindow(object):
         self.b_up.setObjectName("b_up")
         self.horizontalLayout.addWidget(self.b_up)
         self.b_save_changes = QtWidgets.QPushButton(self.widget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.b_save_changes.sizePolicy().hasHeightForWidth())
+        self.b_save_changes.setSizePolicy(sizePolicy)
         self.b_save_changes.setObjectName("b_save_changes")
         self.horizontalLayout.addWidget(self.b_save_changes)
         self.b_down = QtWidgets.QPushButton(self.widget)
@@ -187,7 +192,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(2)
+        self.tabWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -195,15 +200,17 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.l_search_string.setText(_translate("MainWindow", "Строка поиска"))
         self.l_list_with_access_hosts.setText(_translate("MainWindow", "Список всех доступных узлов (хостов)"))
-        self.b_up.setText(_translate("MainWindow", "Вверх"))
+        self.b_up.setText(_translate("MainWindow", "Удалить из списка \n"
+" узлов для мониторинга"))
         self.b_save_changes.setText(_translate("MainWindow", "Сохранить изменения"))
-        self.b_down.setText(_translate("MainWindow", "Вниз"))
-        self.l_list_of_hosts_to_work_with.setText(_translate("MainWindow", "Список текущих узлов (хостов)"))
+        self.b_down.setText(_translate("MainWindow", "Добавить в список \n"
+" узлов для мониторинга"))
+        self.l_list_of_hosts_to_work_with.setText(_translate("MainWindow", "Список узлов (хостов) для мониторинга сети"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.widget), _translate("MainWindow", "Tab 1"))
         self.l_access_line.setText(_translate("MainWindow", "Список всех доступных узлов (хостов)"))
         self.l_with.setText(_translate("MainWindow", "С"))
         self.l_finish.setText(_translate("MainWindow", "По"))
-        self.time_filter.setText(_translate("MainWindow", "Включить фильтр времени"))
+        self.time_filter.setText(_translate("MainWindow", "Включить фильтрацию времени для просмотра истории подключений (потерянных пактов)"))
         self.l_search_line.setText(_translate("MainWindow", "Строка поиска"))
         self.b_read_history_connection.setText(_translate("MainWindow", "Посмотреть историю \n"
 " подключений"))

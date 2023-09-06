@@ -3,6 +3,8 @@ from PyQt5 import QtWidgets
 from matplotlib.backends.backend_qt5agg import (FigureCanvasQTAgg,
                                                 NavigationToolbar2QT)
 from matplotlib.figure import Figure
+import matplotlib.dates as mdates
+import matplotlib.pyplot as plt
 
 
 class MplCanvas(FigureCanvasQTAgg):
@@ -37,14 +39,19 @@ class GraphWindow(QtWidgets.QMainWindow):
         widget.setLayout(layout)
 
         self.sc.axes.set_xlabel('X-axis')
-        self.sc.axes.set_ylabel('Y-axis')
-
+        self.sc.axes.set_ylabel('Задержка сигнала, мс')
+        plt.gca().get_yaxis().get_label().set_rotation(90)
         self.setCentralWidget(widget)
-        self.plot_data([1.0, 2.0, 3.0, 4.0, 5.0],
-                       [1.0, 4.0, 9.0, 16.0, 25.0])
 
     def plot_data(self, x_axes, y_axes):
+        # Convert x_axes to matplotlib-compatible format
+        x_axes = mdates.date2num(x_axes)
         self.sc.axes.plot(x_axes, y_axes)
+
+        # Customize x-axis tick labels
+        date_fmt = mdates.DateFormatter('%Y-%m-%d %H:%M:%S')
+        self.sc.axes.xaxis.set_major_formatter(date_fmt)
+        self.sc.figure.autofmt_xdate(rotation=45)
 
 
 if __name__ == '__main__':

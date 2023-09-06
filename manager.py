@@ -11,6 +11,7 @@ from time import sleep
 from parsing_answer import allocation_to_lists_async
 from list_of_hosts_we_work_with import read_current_hosts
 from loger import LoggerWrapper, app_loger, log_exceptions
+from datetime import datetime
 
 
 class Manager:
@@ -167,6 +168,7 @@ class Manager:
         try:
             current_host = self.list_of_hosts.get(host)
             current_host.setup_average_delay(delay)
+            current_host.add_delay_and_time((delay, datetime.now()))
             if current_host.status_host == 'online_with_error':
                 current_host.change_color('green')
                 current_host.change_status_host_on_online()
@@ -186,6 +188,7 @@ class Manager:
             color = self.define_color(lost_pac)
             current_host.change_color(color)
             current_host.setup_average_delay(delay)
+            current_host.add_delay_and_time((delay, datetime.now()))
             if current_host.status_host in ('unknown', 'offline'):
                 current_host.change_status_host_on_online()
                 self.wwhs.create(current_host.id, current_host.status_host)

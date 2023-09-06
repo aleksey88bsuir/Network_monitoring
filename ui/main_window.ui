@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
+    <width>735</width>
     <height>567</height>
    </rect>
   </property>
@@ -120,6 +120,21 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
+         <widget class="QLabel" name="label_3">
+          <property name="font">
+           <font>
+            <pointsize>15</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Здесь может быть размещена 
+Ваша реклама</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <spacer name="horizontalSpacer">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
@@ -178,7 +193,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>640</width>
+     <width>735</width>
      <height>22</height>
     </rect>
    </property>
