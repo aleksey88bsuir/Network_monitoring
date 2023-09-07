@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
+    <width>724</width>
     <height>480</height>
    </rect>
   </property>
@@ -82,6 +82,9 @@
           </item>
           <item row="4" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout">
+            <property name="sizeConstraint">
+             <enum>QLayout::SetFixedSize</enum>
+            </property>
             <item>
              <widget class="QPushButton" name="b_up">
               <property name="text">
@@ -93,10 +96,16 @@
             <item>
              <widget class="QPushButton" name="b_save_changes">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>42</height>
+               </size>
               </property>
               <property name="text">
                <string>Сохранить изменения</string>

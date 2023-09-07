@@ -20,6 +20,7 @@ class MyWindow(QtWidgets.QMainWindow):
         self.log = LoggerWrapper()
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
+        self.count_change_style = 0
         self.style_sheet = None
         self.step = 0
         self.manager = Manager()
@@ -31,8 +32,8 @@ class MyWindow(QtWidgets.QMainWindow):
         self.hosts_data = None
         self.start_program = None
         self.mode = None
-        self.write_successful_message()
         self.info = QMessageBox()
+        self.write_successful_message()
 
     def write_successful_message(self) -> None:
         self.log.log_info('Программа успешно запущена')
@@ -163,13 +164,16 @@ class MyWindow(QtWidgets.QMainWindow):
 
     def change_style(self) -> None:
         try:
+            self.count_change_style += 1
             file = QFile(self.ui.cd_style.currentData())
             file.open(QFile.ReadOnly | QFile.Text)
             stream = file.readAll()
             self.style_sheet = str(stream, encoding='utf-8')
             self.setStyleSheet(self.style_sheet)
-            self.log.log_info(
-                f'Скин программы изменен на {file}')
+            if self.count_change_style > 2:
+                self.log.log_info(
+                    f'Скин программы изменен на '
+                    f'{self.ui.cd_style.currentData()}')
         except Exception as e:
             self.log.log_error(e)
 

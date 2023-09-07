@@ -3,6 +3,7 @@ from ui.add_and_edit_window import Ui_Dialog
 from func_for_gui import get_music_file
 from manager import Manager
 from loger import LoggerWrapper
+from playsound import playsound
 
 
 class AddAndEditWindow(QtWidgets.QDialog):
@@ -23,6 +24,7 @@ class AddAndEditWindow(QtWidgets.QDialog):
         for music_name in self.music_files:
             self.ui.alarm_edit.addItem(music_name)
         self.ui.b_cancel.clicked.connect(self.close_window)
+        self.ui.b_play_sound.clicked.connect(self.play_sound)
 
     def init_add_host(self) -> None:
         try:
@@ -170,5 +172,14 @@ class AddAndEditWindow(QtWidgets.QDialog):
             self.ui.alarm_edit.setCurrentIndex(0)
             self.ui.l_warning_name.setText('')
             self.ui.l_warning_ip_add.setText('')
+        except Exception as e:
+            self.loger.log_error(e)
+
+    def play_sound(self) -> None:
+        try:
+            music_file = self.ui.alarm_edit.currentText()
+            if music_file:
+                print(music_file)
+                playsound(f'program_voice/voice_files/{music_file}')
         except Exception as e:
             self.loger.log_error(e)

@@ -191,7 +191,7 @@
     <string>ОК</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="b_play_sound">
    <property name="geometry">
     <rect>
      <x>420</x>

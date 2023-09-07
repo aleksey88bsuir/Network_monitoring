@@ -197,8 +197,50 @@
      <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>Файл</string>
+    </property>
+    <addaction name="read_log"/>
+    <addaction name="clear_log"/>
+   </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>Информация</string>
+    </property>
+    <addaction name="about_program"/>
+    <addaction name="about_author"/>
+    <addaction name="tutorial"/>
+   </widget>
+   <addaction name="menu"/>
+   <addaction name="menu_2"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="about_program">
+   <property name="text">
+    <string>О программе</string>
+   </property>
+  </action>
+  <action name="about_author">
+   <property name="text">
+    <string>Об авторе</string>
+   </property>
+  </action>
+  <action name="tutorial">
+   <property name="text">
+    <string>Руководство по эксплуатации</string>
+   </property>
+  </action>
+  <action name="read_log">
+   <property name="text">
+    <string>Просмотреть log файл</string>
+   </property>
+  </action>
+  <action name="clear_log">
+   <property name="text">
+    <string>Очистить log файл</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
