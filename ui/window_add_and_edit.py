@@ -1,6 +1,6 @@
 from PyQt5 import QtWidgets
 from ui.add_and_edit_window import Ui_Dialog
-from func_for_gui import get_music_file
+from ui.func_for_gui import get_music_file
 from manager import Manager
 from loger import LoggerWrapper
 from playsound import playsound

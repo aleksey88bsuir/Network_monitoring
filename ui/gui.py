@@ -13,15 +13,15 @@ from PyQt5.QtGui import QBrush, QColor, QPixmap
 from PyQt5.QtWidgets import QTableWidgetItem, QSizePolicy, \
     QHeaderView, QMessageBox
 from ui.main_window import Ui_MainWindow
-from run_nm_for_gui import Monitoring
-from func_for_gui import get_music_file
+from ui.run_nm_for_gui import Monitoring
+from ui.func_for_gui import get_music_file
 from manager import Manager
 from program_voice.python_voice import PyVoice
 from PyQt5.QtCore import QFile, Qt
 from ui.edit_and_view import EditAndViewWindow
 from loger import LoggerWrapper, app_loger, log_exceptions
 from ping_object import PingObject
-from func_for_gui import open_file
+from ui.func_for_gui import open_file
 
 
 class MyWindow(QtWidgets.QMainWindow):
@@ -297,8 +297,14 @@ class MyWindow(QtWidgets.QMainWindow):
         open_file('tutorial.txt')
 
 
-if __name__ == "__main__":
+def main():
     app = QtWidgets.QApplication([])
     application = MyWindow()
     application.show()
     app.exec()
+
+
+if __name__ == "__main__":
+    main()
+
+

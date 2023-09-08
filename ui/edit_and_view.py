@@ -6,8 +6,8 @@ from PyQt5.QtWidgets import QListWidgetItem, QTableWidgetItem, QHeaderView, \
 from ui.edit_and_view_window import Ui_MainWindow
 from search_host import HostsIter
 from list_of_hosts_we_work_with import write_current_hosts
-from window_add_and_edit import AddAndEditWindow
-from func_for_gui import (show_host_status_history,
+from ui.window_add_and_edit import AddAndEditWindow
+from ui.func_for_gui import (show_host_status_history,
                           show_host_status_history_with_time,
                           show_host_lp_history,
                           show_host_lp_history_with_time)
