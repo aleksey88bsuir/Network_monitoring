@@ -1,4 +1,13 @@
 # pyuic5 name.ui -o name.py
+# import sys
+# import os
+#
+#
+# sys.path.insert(0,
+#                      os.path.dirname(
+#                          os.path.dirname(os.path.realpath(__file__))))
+#
+
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import QBrush, QColor, QPixmap
 from PyQt5.QtWidgets import QTableWidgetItem, QSizePolicy, \
