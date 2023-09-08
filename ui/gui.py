@@ -12,6 +12,7 @@ from PyQt5.QtCore import QFile, Qt
 from ui.edit_and_view import EditAndViewWindow
 from loger import LoggerWrapper, app_loger, log_exceptions
 from ping_object import PingObject
+from func_for_gui import open_file
 
 
 class MyWindow(QtWidgets.QMainWindow):
@@ -44,6 +45,11 @@ class MyWindow(QtWidgets.QMainWindow):
             self.ui.b_stop.clicked.connect(self.stop_monitoring)
             self.ui.b_stop.setEnabled(False)
             self.ui.b_modify.clicked.connect(self.open_modify_window)
+            self.ui.read_log.triggered.connect(self.read_log)
+            self.ui.clear_log.triggered.connect(self.clear_log)
+            self.ui.about_author.triggered.connect(self.show_about_author)
+            self.ui.about_program.triggered.connect(self.show_about_program)
+            self.ui.tutorial.triggered.connect(self.show_tutorial)
             self.ui.q_volume_cont.setRange(0, 100)
             self.ui.q_volume_cont.setValue(70)
             self.ui.q_volume_cont.setNotchesVisible(True)
@@ -251,6 +257,35 @@ class MyWindow(QtWidgets.QMainWindow):
             event.accept()
         else:
             event.ignore()
+
+    # ------------------------ MENU ---------------------------------
+    @staticmethod
+    def read_log():
+        open_file('app.log')
+
+    def clear_log(self):
+        with open('app.log', 'w') as app_log:
+            app_log.write('')
+        self.log.log_info('Очищен журнал логирования')
+
+    def show_about_author(self):
+        self.info.information(
+            self, 'О разработчике',
+            'Разработано компанией Р-4.4.3.У_comp \n'
+                 'Вы можете поддержать проект \n'
+                 'Для донатов 6711 2900 4619 0066'
+            )
+
+    def show_about_program(self):
+        self.info.information(
+            self, 'О программе',
+            'Программа "Network monitoring v. 1.0.0" '
+            'абсолютно бесплатная. Используете её на свой страх и риск.'
+        )
+
+    @staticmethod
+    def show_tutorial():
+        open_file('tutorial.txt')
 
 
 if __name__ == "__main__":
